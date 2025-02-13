@@ -4,7 +4,7 @@ networks:
   fiware:
     driver: bridge
 volumes:
-    mongodb: ~
+    mongodb: mongoDBOrionPersist
 services:
   orion:
     image: telefonicaiot/fiware-orion

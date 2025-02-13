@@ -1,63 +1,37 @@
 
+************************************************************************
+***********************************************************************
+                          Orion
+************************************************************************
+***********************************************************************
+VERSION DE ORION
 curl -X GET "http://localhost:1026/version"
+
+ENTIDADES REGISTRADAS EN ORION
 curl -X GET "http://localhost:1026/v2/entities/"
+
+ENTIDAD BUSCADA POPR ID
 curl -X GET "http://localhost:1026/v2/entities/urn:ngsi-ld:Sensor:001"
 
 
-
-curl -X POST "http://localhost:4041/iot/services" \
-  -H "Content-Type: application/json" \
-  -H "fiware-service: openiot" \
-  -H "fiware-servicepath: /" \
+curl -X POST "http://localhost:1026/v2/entities/"
+  -H 'Content-Type: application/json' \
   -d '{
-    "services": [
-      {
-        "apikey": "iotkey",
-        "cbroker": "http://orion:1026",
-        "entity_type": "Thing",
-        "resource": "/iot/json"
-      }
-    ]
+    "id": "Room1",
+    "type": "Room",
+    "temperature": {
+      "value": 23,
+      "type": "Number"
+    },
+    "pressure": {
+      "value": 720,
+      "type": "Number"
+    }
   }'
 
-
-<--Crea un servicio IoT en el IoT Agent -->
-  curl -X POST "http://localhost:4041/iot/services" \
-  -H "Content-Type: application/json" \
-  -H "fiware-service: openiot" \
-  -H "fiware-servicepath: /" \
-  -d '{
-    "services": [
-      {
-        "apikey": "ulkey",
-        "cbroker": "http://localhos:1026",
-        "entity_type": "Device",
-        "resource": "/iot/ul"
-      }
-    ]
-  }'
-
-REGISTRAR DISPOSITIVO
-curl -X POST "http://localhost:4041/iot/devices" \
-  -H "Content-Type: application/json" \
-  -H "fiware-service: openiot" \
-  -H "fiware-servicepath: /" \
-  -d '{
-    "devices": [
-      {
-        "device_id": "sensor002",
-        "entity_name": "urn:ngsi-ld:Device:sensor002",
-        "entity_type": "Device",
-        "protocol": "UltraLight",
-        "transport": "HTTP",
-        "attributes": [
-          { "object_id": "t", "name": "temperature", "type": "Number" },
-          { "object_id": "h", "name": "humidity", "type": "Number" }
-        ]
-      }
-    ]
-  }'
-
+************************************************************************
+***********************************************************************
+                          IoT Agent
 ************************************************************************
 ***********************************************************************
 
@@ -110,7 +84,7 @@ RECIBIR MEDIDAS
 curl -iX POST \
   'http://localhost:7896/iot/json?k=iot-json-key&i=sensorJSON001' \
   -H 'Content-Type: application/json' \
-  -d '{"t":27,"h":55}'
+  -d '{"t":25.5,"h":55}'
 
 *****************************************************************
 
