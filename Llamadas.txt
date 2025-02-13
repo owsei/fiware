@@ -1,0 +1,237 @@
+
+curl -X GET "http://localhost:1026/version"
+curl -X GET "http://localhost:1026/v2/entities/"
+curl -X GET "http://localhost:1026/v2/entities/urn:ngsi-ld:Sensor:001"
+
+
+
+curl -X POST "http://localhost:4041/iot/services" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "services": [
+      {
+        "apikey": "iotkey",
+        "cbroker": "http://orion:1026",
+        "entity_type": "Thing",
+        "resource": "/iot/json"
+      }
+    ]
+  }'
+
+
+<--Crea un servicio IoT en el IoT Agent -->
+  curl -X POST "http://localhost:4041/iot/services" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "services": [
+      {
+        "apikey": "ulkey",
+        "cbroker": "http://localhos:1026",
+        "entity_type": "Device",
+        "resource": "/iot/ul"
+      }
+    ]
+  }'
+
+REGISTRAR DISPOSITIVO
+curl -X POST "http://localhost:4041/iot/devices" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "devices": [
+      {
+        "device_id": "sensor002",
+        "entity_name": "urn:ngsi-ld:Device:sensor002",
+        "entity_type": "Device",
+        "protocol": "UltraLight",
+        "transport": "HTTP",
+        "attributes": [
+          { "object_id": "t", "name": "temperature", "type": "Number" },
+          { "object_id": "h", "name": "humidity", "type": "Number" }
+        ]
+      }
+    ]
+  }'
+
+************************************************************************
+***********************************************************************
+
+
+curl -X GET "http://localhost:1026/version"
+curl -X GET "http://localhost:1026/v2/entities/"
+curl -X GET "http://localhost:1026/v2/entities/urn:ngsi-ld:Sensor:001"
+
+curl http://localhost:4041/iot/about
+*************************************************************************
+CONFIGURAR DISPOSITIVOS JSON EN ORION
+curl -X POST "http://localhost:4041/iot/services" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "services": [{
+      "apikey": "iot-json-key",
+      "cbroker": "http://orion:1026",
+      "entity_type": "DeviceIoTJSON",
+      "resource": "/iot/json",
+     "attributes": [
+       { "object_id": "t", "name": "temperature", "type": "Number" },
+       { "object_id": "h", "name": "humidity", "type": "Number" }
+     ]      
+    }]
+  }'
+**********************************************************************
+REGISTRAR DISPOSITIVOS JSON EN ORION
+curl -X POST "http://localhost:4041/iot/devices" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "devices": [{
+      "device_id": "sensorJSON001",
+      "entity_name": "urn:ngsiJSON:SensorJSON:001",
+      "entity_type": "DeviceIoTJSON",
+      "attributes": [
+        { "object_id": "t", "name": "temperature", "type": "Number" },
+        { "object_id": "h", "name": "humidity", "type": "Number" }
+      ],
+      "protocol": "IoT-JSON",
+      "apikey": "iot-json-key"
+    }]
+  }'
+
+
+RECIBIR MEDIDAS
+curl -iX POST \
+  'http://localhost:7896/iot/json?k=iot-json-key&i=sensorJSON001' \
+  -H 'Content-Type: application/json' \
+  -d '{"t":27,"h":55}'
+
+*****************************************************************
+
+curl -X POST "http://localhost:4041/iot/devices" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "devices": [{
+      "device_id": "sensorJSON002",
+      "entity_name": "urn:ngsiJSON:SensorJSON:002",
+      "entity_type": "DeviceIoTJSON",
+      "timezone": "Europa/Madrid",
+      "attributes": [
+        { "object_id": "t", "name": "temperature", "type": "Number" },
+        { "object_id": "h", "name": "humidity", "type": "Number" }
+      ],
+      "protocol": "IoT-JSON",
+      "apikey": "iot-json-key"
+    }]
+  }'
+
+curl -iX POST \
+  'http://localhost:7896/iot/json?k=iot-json-key&i=sensorJSON002' \
+  -H 'Content-Type: application/json' \
+  -d '{"t":23,"h":60}'
+
+  *****************************************************************************
+
+curl -X POST http://localhost:4041/iot/services
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+
+curl -X POST "http://localhost:4041/iot/json?k=iot-json-key&i=sensorJSON001" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "t": 27,
+    "h": 68
+    }'
+
+curl -X POST "http://localhost:4041/iot/json?k=iot-json-key&i=sensorJSON001" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "t": 25.4,
+    "h": 60.2
+  }'
+
+REGISTRAR DISPOSITIVO JSON
+curl -X POST "http://localhost:4041/iot/devices" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "devices": [
+      {
+        "device_id": "sensorJSON001",
+        "entity_name": "urn:ngsi:DeviceJSON:sensorJSON001",
+        "entity_type": "DeviceJSON",
+        "protocol": "JSON",
+        "transport": "HTTP",
+        "attributes": [
+          { "object_id": "t", "name": "temperature", "type": "Number" },
+          { "object_id": "h", "name": "humidity", "type": "Number" }
+        ]
+      }
+    ]
+  }'
+
+
+curl -X POST "http://localhost:4041/iot/json?k=iot-key&i=sensorJSON001" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "t": 25.4,
+    "h": 60.2
+  }'
+
+
+ENVIAR DATOS SIMULADOS
+
+curl -X POST "http://localhost:7896/iot/ul?k=ulkey&i=sensor001" -d "t|23.5|h|55"
+
+curl -m 60 -X POST  'http://localhost:7896/iot/ul?k=ulkey&i=sensor001'  -d "t|23"
+
+
+VERIFICAR LLEGADA A ORION
+curl -X GET "http://localhost:1026/v2/entities/urn:ngsi-ld:Device:sensor001" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /"
+
+curl -X POST "http://localhost:7896" -d "t|23"
+
+
+
+
+
+
+curl -X POST "http://localhost:4041/iot/json?k=iot-json-key&i=sensorJSON002" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "t": 25.4,
+    "h": 60.2
+  }'
+
+  curl -X POST "http://localhost:4041/iot/json?k=iot-json-key&i=sensorJSON002" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "t": 25.4,
+    "h": 60.2
+  }'
+
+
+  curl -X GET "http://localhost:1026/v2/entities/urn:ngsiJSON:SensorJSON:001"
+
+
+curl -X POST "http://localhost:4041/iot/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "k": "iot-json-key",
+    "i": "sensorJSON002",
+    "t": 25.4,
+    "h": 60.2
+  }'
+
+http://localhost:4041/v2/

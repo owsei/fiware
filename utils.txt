@@ -1,0 +1,26 @@
+ 
+Levantar servicios 
+    docker-compose -f docker-compose-orion.yaml up -d
+
+Parar servicios
+    docker-compose down
+
+    docker stop docker-iot-agent-ul-1
+
+Borrar servicios
+    docker rm docker-iot-agent-ul-1
+
+
+Acceder al interior de contendores
+ docker exec -it docker-cygnus-1 /bin/bash
+ docker exec -it fiware-iot-agent /bin/bash
+    
+Orion
+    probar VERSION
+    curl -X GET "http://localhost:1026/version"
+
+    entidades
+    curl -X GET "http://localhost:1026/v2/entities/"
+
+
+

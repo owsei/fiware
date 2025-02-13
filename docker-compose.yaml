@@ -1,0 +1,128 @@
+version: '3'
+services:
+
+  orion:
+    image: fiware/orion
+    ports:
+      - "1026:1026"
+    command: 
+      -logLevel DEBUG 
+      -noCache 
+      -dbURI mongodb://mongo
+      -
+    depends_on:
+      - mongo
+      - postgres
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://0.0.0.0:1026/version"]
+    #   interval: 1m
+    #   timeout: 10s
+    #   retries: 3
+    networks:
+      - fiware
+
+  cygnus:
+    image: fiware/cygnus-ngsi:1.13.0
+    ports:
+      - "5050:5050"
+    depends_on:
+      - orion
+    networks:
+      - fiware
+
+  mongo:
+    image: mongo:3.2
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - fiware
+
+  postgres:
+    image: postgres:9.5
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=orion
+      - POSTGRES_USER=orion
+      - POSTGRES_PASSWORD=orion
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - fiware
+
+  iot-agent:
+    image: fiware/iotagent-ul
+    hostname: iot-agent
+    container_name: fiware-iot-agent
+    depends_on:
+        - mongo
+    expose:
+        - "4061"
+        - "7896"
+    ports:
+        - "4061:4061"
+        - "7896:7896"
+    environment:
+        - "IOTA_CB_HOST=orion"
+        - "IOTA_CB_PORT=1026"
+        - "IOTA_NORTH_PORT=4061"
+        - "IOTA_REGISTRY_TYPE=mongo"
+        - "IOTA_MONGO_HOST=mongo"
+        - "IOTA_MONGO_PORT=27017"
+        - "IOTA_MONGO_DB=iotagent-ul"
+        - "IOTA_HTTP_PORT=7896"
+        - "IOTA_PROVIDER_URL=http://iot-agent:4061"
+    networks:
+      - fiware
+
+  # quantumleap:
+  #   image: smartsdk/quantumleap
+  #   ports:
+  #     - "8668:8668"
+  #   depends_on:
+  #     - mongo
+  #     - orion
+  #     - crate
+  #   environment:
+  #     - CRATE_HOST=crate
+  #   networks:
+  #     - fiware
+  
+  # crate:
+  #   image: crate:1.0.5
+  #   ports:
+  #     # Admin UI
+  #     - "4200:4200"
+  #     # Transport protocol
+  #     - "4300:4300"
+  #   command: -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
+  #   volumes:
+  #     - cratedata:/data
+  #   networks:
+  #     - fiware
+
+  # grafana:
+  #   image: grafana/grafana
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - GF_INSTALL_PLUGINS=crate-datasource,grafana-clock-panel,grafana-worldmap-panel
+  #   depends_on:
+  #     - crate
+  #   networks:
+  #     - fiware
+  
+
+
+volumes:
+  mongodata:
+  # cratedata:
+  redisdata:
+  grafanadata:
+
+networks:
+    fiware:
+    # driver_opts:
+    #     com.docker.network.driver.mtu: ${DOCKER_MTU:-1400}
