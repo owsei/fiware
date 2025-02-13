@@ -35,12 +35,9 @@ curl -X POST "http://localhost:1026/v2/entities/"
 ************************************************************************
 ***********************************************************************
 
-
-curl -X GET "http://localhost:1026/version"
-curl -X GET "http://localhost:1026/v2/entities/"
-curl -X GET "http://localhost:1026/v2/entities/urn:ngsi-ld:Sensor:001"
-
+SABER SI EL SERVICIO ESTA FUNCIONANDO
 curl http://localhost:4041/iot/about
+
 *************************************************************************
 CONFIGURAR DISPOSITIVOS JSON EN ORION
 curl -X POST "http://localhost:4041/iot/services" \
