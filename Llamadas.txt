@@ -95,12 +95,12 @@ REGISTRAR UN SERVICIO DE IOT-UL
 curl -iX POST \
   'http://localhost:4061/iot/services' \
   -H 'Content-Type: application/json' \
-  -H 'fiware-service: testservice' \
+  -H 'fiware-service: iot_ul_service' \
   -H 'fiware-servicepath: /iot_ul' \
   -d '{
  "services": [
    {
-     "apikey":      "hallo",
+     "apikey":      "iot-json-key",
      "cbroker":     "http://orion:1026",
      "entity_type": "multiSensor",
      "resource":    "/iot/ul"
@@ -112,7 +112,7 @@ REGISTRAR UN SENSOR IOT UL
 
 curl -X POST 'http://localhost:4061/iot/devices' \
   -H "Content-Type: application/json" \
-  -H "fiware-service: testservice" \
+  -H "fiware-service: iot_ul_service" \
   -H "fiware-servicepath: /iot_ul" \
   -d '{
   "devices": [
@@ -121,16 +121,24 @@ curl -X POST 'http://localhost:4061/iot/devices' \
       "entity_name": "LivingRoomSensor1",
       "entity_type": "multiSensor",
       "protocol":    "PDI-IoTA-UltraLight",
-      "transport":   "MQTT",
+      "transport":   "HTTP",
       "attributes": [
         { "object_id": "t", "name": "Temperature", "type": "Integer" },
+        { "object_id": "h", "name": "Humidity", "type": "Integer" },
         { "object_id": "l", "name": "Luminosity", "type": "Integer" }
-      ]
+      ],
+      "apikey": "iot-json-key"
     }
   ]
 }' 
 
-mosquitto_pub  -m "t|2|l|5" -t "/hallo/sensor01/attrs"
+
+CAMBIAR DATOS
+curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=sensor02' \
+  -H 'Content-Type: text/plain' \
+  -d 't|25|l|1|h|55'
+
+mosquitto_sub  "t|2|l|5|h|55" -t "ul/iot-json-key/sensor01"
 
 
 *****************************************************************
