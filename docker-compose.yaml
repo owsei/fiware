@@ -10,6 +10,8 @@ volumes:
 services:
   orion:
     image: telefonicaiot/fiware-orion
+    hostname: orion
+    container_name: orion
     ports:
       - "1026:1026"
     depends_on:
@@ -21,7 +23,8 @@ services:
 
   mongo:
     image: mongo:4.2
-    container_name: fiware-mongo
+    hostname: mongo
+    container_name: mongo
     ports:
       - "27017:27017"
     command: 
@@ -35,7 +38,7 @@ services:
   cygnus:
     image: fiware/cygnus-ngsi
     hostname: cygnus
-    container_name: fiware-cygnus
+    container_name: cygnus
     depends_on:
       - orion
       - postgres
@@ -62,7 +65,7 @@ services:
   postgres:
     image: postgres
     hostname: postgres
-    container_name: fiware-postgres
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
@@ -136,7 +139,7 @@ services:
   mosquitto:
     image: eclipse-mosquitto
     hostname: mosquitto
-    container_name: fiware-mosquitto
+    container_name: mosquitto
     expose:
       - "1883"
       - "9001"
