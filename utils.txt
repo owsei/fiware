@@ -12,8 +12,11 @@ Borrar servicios
 
 
 Acceder al interior de contendores
- docker exec -it docker-cygnus-1 /bin/bash
+ docker exec -it cygnus /bin/bash
  docker exec -it fiware-iot-agent /bin/bash
+
+ docker exec -it cygnus /bin/bash
+ /etc/cygnus/cygnus.conf
     
 Orion
     probar VERSION

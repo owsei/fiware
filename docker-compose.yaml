@@ -42,18 +42,19 @@ services:
     depends_on:
       - orion
       - postgres
-      - mongo
+      # - mongo
     ports:
       - "5055:5055"
       - "5080:5080" 
     environment:
       - CYGNUS_ORION_HOST=orion
-      - CYGNUS_ORION_PORT=1026 
+      - CYGNUS_ORION_PORT=1026
       - CYGNUS_POSTGRESQL_HOST=postgres_orion # Hostname of the PostgreSQL server used to persist historical context data
       - CYGNUS_POSTGRESQL_PORT=5432 # Port that the PostgreSQL server uses to listen to commands
       - CYGNUS_POSTGRESQL_USER=admin # Username for the PostgreSQL database user
       - CYGNUS_POSTGRESQL_PASS=1111 # Password for the PostgreSQL database user
       - CYGNUS_MONGO_HOSTS=mongo
+      - CYGNUS_MONGO_SERVICE_PORT=5051
       - CYGNUS_MONGO_ENABLE_NAME_MAPPINGS=true
       - CYGNUS_POSTGRESQL_ENABLE_CACHE=true # Switch to enable caching within the PostgreSQL configuration
       - CYGNUS_POSTGRESQL_SERVICE_PORT=5055 # The port the agent.conf is configured for
@@ -62,6 +63,7 @@ services:
       - CYGNUS_API_PORT=5080 # Port that Cygnus listens on for operational reasons
     networks:
       - fiware
+
   postgres:
     image: postgres
     hostname: postgres
@@ -72,9 +74,11 @@ services:
       - POSTGRES_DB=postgres_orion
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=1111
-      
     volumes:
       - postgresDBOrion:/data/db
+    networks:
+      - fiware
+
   # iot-agent:
   #   image: fiware/iotagent-json
   #   hostname: iot-agent-json
@@ -107,8 +111,7 @@ services:
     hostname: iot-agent-ul
     container_name: fiware-iot-agent-ul
     depends_on:
-        - mongo
-        - mosquitto
+        - orion
     expose:
         - "4061"
         - "7896"
@@ -133,20 +136,6 @@ services:
       - IOTA_PROVIDER_URL=http://iot-agent:4061
     networks:
       - fiware
-    # healthcheck:
-    #   test: curl --fail -s http://iot-agent:4061/iot/about || exit 1
+    healthcheck:
+      test: curl --fail -s "http://iot-agent:4061/iot/about" || exit 1
 
-  mosquitto:
-    image: eclipse-mosquitto
-    hostname: mosquitto
-    container_name: mosquitto
-    expose:
-      - "1883"
-      - "9001"
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-    volumes:
-      - mosquitto:/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-    networks:
-      - fiware
