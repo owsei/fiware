@@ -1,4 +1,17 @@
-http://213.0.38.142/
+***********************************************************************
+                      COMPONENTS VERSION 
+***********************************************************************
+VERSION DE ORION
+curl -X GET "http://localhost:1026/version"
+
+VERSION DE Cygnus
+curl "http://localhost:5080/v1/version"
+
+
+***********************************************************************
+
+
+
 ************************************************************************
 ***********************************************************************
                           Orion
@@ -176,7 +189,7 @@ curl -X POST 'http://localhost:4061/iot/devices' \
   "devices": [
     {
       "device_id": "AirQuality0001",
-      "entity_name": "AirQuality",
+      "entity_name": "AirQuality0001",
       "entity_type": "AirQuality",
       "protocol":    "IoTA-UltraLight",
       "transport":   "HTTP",
@@ -206,7 +219,7 @@ curl -X POST 'http://localhost:4061/iot/devices' \
   "devices": [
     {
       "device_id": "AirQuality0002",
-      "entity_name": "AirQuality",
+      "entity_name": "AirQuality0002",
       "entity_type": "AirQuality",
       "protocol":    "IoTA-UltraLight",
       "transport":   "HTTP",
@@ -234,19 +247,13 @@ curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0001'
   -H 'Content-Type:text/plain' \
   -H "Fiware-Service: iot_ul_service" \
   -H "Fiware-ServicePath: /iot_ul" \
-  -d 't|31|h|50|q|3|gps|42.812847,-1.642932'
-
-curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0001'
-  -H 'Content-Type:text/plain' \
-  -H "Fiware-Service: iot_ul_service" \
-  -H "Fiware-ServicePath: /iot_ul" \
-  -d 'q|1|t|33'
+  -d 't|34|h|50|q|3|gps|42.812847,-1.642932'
 
 curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0002'
   -H 'Content-Type:text/plain' \
   -H "Fiware-Service: iot_ul_service" \
   -H "Fiware-ServicePath: /iot_ul" \
-  -d 't|31|h|50|q|3|gps|42.813288,-1.648511'
+  -d 't|120|h|50|q|3|gps|42.813288,-1.648511'
 
 
 SABER SI LAS ENTIDADES EN ORION SE CREAN BIEN
@@ -269,7 +276,7 @@ curl -X GET "http://localhost:1026/v2/types" \
 docker inspect cygnus
 
 VERSION DE Cygnus
-curl "http://localhost:5080/v1/version"
+curl -X GET "http://localhost:5080/v1/version"
 
 
 curl -X GET "http://localhost:5080/v1/stats"
@@ -278,7 +285,7 @@ SUBCRIPTCIONES CREADAS EN ORION POR CYGNUS
 curl -X GET "http://localhost:1026/v2/subscriptions/"
 
 NOTIFICATION EXAMPLE
-curl http://localhost:5050/notify
+curl http://localhost:5055/notify
 
 CONFIGURACION DE ORION PARA LLAMADAS CYGNUS (ORIGINAL Room)
 curl -X POST 'http://localhost:1026/v2/subscriptions/' \
