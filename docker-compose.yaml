@@ -96,72 +96,49 @@ services:
     depends_on:
       - orion
       - postgres
-      - mongo-cygnus
     ports:
-      - "5050:5050"
       - "5055:5055"
       - "5080:5080" 
     environment:
       - CYGNUS_ORION_HOST=orion
       - CYGNUS_ORION_PORT=1026
       
-      - CYGNUS_POSTGRESQL_HOST=localhost # Hostname of the PostgreSQL server used to persist historical context data
-      - CYGNUS_POSTGRES_DB=postgres_orion # postgres DB
+      - CYGNUS_POSTGRESQL_HOST=Localhost # Hostname of the PostgreSQL server used to persist historical context data
       - CYGNUS_POSTGRESQL_PORT=5432 # Port that the PostgreSQL server uses to listen to commands
+      - CYGNUS_POSTGRES_DB=fiware_db # postgres DB
       - CYGNUS_POSTGRESQL_USER=admin # Username for the PostgreSQL database user
       - CYGNUS_POSTGRESQL_PASS=1111 # Password for the PostgreSQL database user
-      - CYGNUS_POSTGRESQL_ENABLE_CACHE=true # Switch to enable caching within the PostgreSQL configuration
-      - CYGNUS_POSTGRESQL_SERVICE_PORT=5055 # The port the agent.conf is configured for
-      - CYGNUS_POSTGRESQL_ENABLE=true
+      - CYGNUS_POSTGRESQL_SERVICE_PORT =5055
 
-      - CYGNUS_MONGO_HOSTS=mongo-cygnus:27018 # Hostname of the MongoDB server used to persist historical context data
-      - CYGNUS_MONGO_ENABLE=true # Switch to enable the MongoDB sink
-      - CYGNUS_MONGO_SERVICE_PORT=5051
+      - CYGNUS_MONGO_HOSTS=localhost:27018
       - CYGNUS_MONGO_ENABLE_NAME_MAPPINGS=true
-     
+      - CYGNUS_MONGO_SERVICE_PORT =5051
+
+
       - CYGNUS_LOG_LEVEL=DEBUG # The logging level for Cygnus
       - CYGNUS_SERVICE_PORT=5055 # Notification Port that Cygnus listens to for Postgres subscriptions
       - CYGNUS_API_PORT=5080 # Port that Cygnus listens on for operational reasons
     networks:
       - fiware
 
-  sth-comet:
-    image: telefonicaiot/fiware-sth-comet
-    hostname: sth-comet
-    container_name: sth-comet
-    depends_on:
-      - cygnus
-      - mongo-cygnus
-    ports:
-      - "8666:8666"
-    environment:
-      - STH_HOST=localhost
-      - STH_PORT=8666
-      - DB_PREFIX=sth_
-      - LOGOPS_LEVEL=DEBUG
-      - DB_URI=mongo-cygnus:27018
-    networks:
-      - fiware
-
-  # sth-comet:
-  #   image: fiware/sth-comet
+  # fiware-sth-comet:
+  #   image: telefonicaiot/fiware-sth-comet
   #   hostname: sth-comet
-  #   container_name: fiware-sth-comet
+  #   container_name: sth-comet
   #   depends_on:
-  #     - mongo-cygnus
+  #     - mongo
+  #     - cygnus
   #   ports:
   #     - "8666:8666"
   #   environment:
-  #     - STH_HOST=0.0.0.0
+  #     - STH_HOST=localhost
   #     - STH_PORT=8666
-  #     - DB_PREFIX=sth_
-  #     - DB_URI=mongo-db:27018
-  #     - LOGOPS_LEVEL=DEBUG
+  #     - DB_URI=localhost:27018
   #   networks:
   #     - fiware
 
   mongo-cygnus:
-    image: mongo:3.6
+    image: mongo
     hostname: mongo-cygnus
     container_name: mongo-cygnus
     ports:
@@ -172,6 +149,8 @@ services:
       - mongoDBCygnus:/data/db
     networks:
       - fiware
+ 
+
 
   mosquitto:
     image: eclipse-mosquitto

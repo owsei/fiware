@@ -1,4 +1,17 @@
-http://213.0.38.142/
+***********************************************************************
+                      COMPONENTS VERSION 
+***********************************************************************
+VERSION DE ORION
+curl -X GET "http://localhost:1026/version"
+
+VERSION DE Cygnus
+curl "http://localhost:5080/v1/version"
+
+
+***********************************************************************
+
+
+
 ************************************************************************
 ***********************************************************************
                           Orion
@@ -147,9 +160,6 @@ curl -iX POST \
                           IoT Agent UL
 ************************************************************************
 ***********************************************************************
-
-SABER SI EL SERVICIO ESTA FUNCIONANDO
-curl -X GET 'http://localhost:4061/iot/about'
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 REGISTRAR UN SERVICIO DE IOT-UL AIR QUALITY
@@ -184,16 +194,16 @@ curl -X POST 'http://localhost:4061/iot/devices' \
       "protocol":    "IoTA-UltraLight",
       "transport":   "HTTP",
       "attributes": [
-        { "object_id": "t", "name": "Temperature", "type": "Integer" },
-        { "object_id": "h", "name": "Humidity", "type": "Integer" },
-        { "object_id": "q", "name": "AirQuality", "type": "Integer" },
-        { "object_id": "gps", "name": "Location", "type": "text" }
+        { "object_id": "t", "name": "temperature", "type": "Integer" },
+        { "object_id": "h", "name": "humidity", "type": "Integer" },
+        { "object_id": "q", "name": "airquality", "type": "Integer" },
+        { "object_id": "l", "name": "location", "type": "text" }
       ],
       "static_attributes": [
-        { "name": "Temperature", "type": "Integer", "value": 0 },
-        { "name": "Humidity", "type": "Integer", "value": 0 },
-        { "name": "AirQuality", "type": "Integer", "value": 0 },
-        { "name": "Location", "type": "Text", "value": "0,0" }
+        { "name": "temperature", "type": "Integer", "value": 0 },
+        { "name": "humidity", "type": "Integer", "value": 0 },
+        { "name": "airquality", "type": "Integer", "value": 0 },
+        { "name": "location", "type": "Text", "value": "0,0" }
       ],
       "apikey": "iot-json-key",
       "autocreate": true
@@ -214,45 +224,16 @@ curl -X POST 'http://localhost:4061/iot/devices' \
       "protocol":    "IoTA-UltraLight",
       "transport":   "HTTP",
       "attributes": [
-        { "object_id": "t", "name": "Temperature", "type": "Integer" },
-        { "object_id": "h", "name": "Humidity", "type": "Integer" },
-        { "object_id": "q", "name": "AirQuality", "type": "Integer" },
-        { "object_id": "gps", "name": "Location", "type": "text" }
+        { "object_id": "t", "name": "temperature", "type": "Integer" },
+        { "object_id": "h", "name": "humidity", "type": "Integer" },
+        { "object_id": "q", "name": "airquality", "type": "Integer" },
+        { "object_id": "l", "name": "location", "type": "text" }
       ],
       "static_attributes": [
-        { "name": "Temperature", "type": "Integer", "value": 0 },
-        { "name": "Humidity", "type": "Integer", "value": 0 },
-        { "name": "AirQuality", "type": "Integer", "value": 0 },
-        { "name": "Location", "type": "Text", "value": "0,0" }
-      ],
-      "apikey": "iot-json-key"
-    }
-  ]
-}' 
-
-curl -X POST 'http://localhost:4061/iot/devices' \
-  -H "Content-Type: application/json" \
-  -H "fiware-service: iot_ul_service" \
-  -H "fiware-servicepath: /iot_ul" \
-  -d '{
-  "devices": [
-    {
-      "device_id": "AirQuality0003",
-      "entity_name": "AirQuality0003",
-      "entity_type": "AirQuality",
-      "protocol":    "IoTA-UltraLight",
-      "transport":   "HTTP",
-      "attributes": [
-        { "object_id": "t", "name": "Temperature", "type": "Integer" },
-        { "object_id": "h", "name": "Humidity", "type": "Integer" },
-        { "object_id": "q", "name": "AirQuality", "type": "Integer" },
-        { "object_id": "gps", "name": "Location", "type": "text" }
-      ],
-      "static_attributes": [
-        { "name": "Temperature", "type": "Integer", "value": 0 },
-        { "name": "Humidity", "type": "Integer", "value": 0 },
-        { "name": "AirQuality", "type": "Integer", "value": 0 },
-        { "name": "Location", "type": "Text", "value": "0,0" }
+        { "name": "temperature", "type": "Integer", "value": 0 },
+        { "name": "humidity", "type": "Integer", "value": 0 },
+        { "name": "airquality", "type": "Integer", "value": 0 },
+        { "name": "location", "type": "Text", "value": "0,0" }
       ],
       "apikey": "iot-json-key"
     }
@@ -266,25 +247,13 @@ curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0001'
   -H 'Content-Type:text/plain' \
   -H "Fiware-Service: iot_ul_service" \
   -H "Fiware-ServicePath: /iot_ul" \
-  -d 't|32|h|75|q|1|gps|42.812847,-1.642932'
-
-curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0001'
-  -H 'Content-Type:text/plain' \
-  -H "Fiware-Service: iot_ul_service" \
-  -H "Fiware-ServicePath: /iot_ul" \
-  -d 'q|1|t|33'
+  -d 't|34|h|50|q|3|gps|42.812847,-1.642932'
 
 curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0002'
   -H 'Content-Type:text/plain' \
   -H "Fiware-Service: iot_ul_service" \
   -H "Fiware-ServicePath: /iot_ul" \
-  -d 't|31|h|50|q|3|gps|42.813288,-1.648511'
-
-  curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0003'
-  -H 'Content-Type:text/plain' \
-  -H "Fiware-Service: iot_ul_service" \
-  -H "Fiware-ServicePath: /iot_ul" \
-  -d 't|31|h|50|q|3|gps|42.813288,-1.648511'
+  -d 't|23|h|55|q|3|gps|42.813288,-1.648511'
 
 
 SABER SI LAS ENTIDADES EN ORION SE CREAN BIEN
@@ -307,13 +276,10 @@ curl -X GET "http://localhost:1026/v2/types" \
 docker inspect cygnus
 
 VERSION DE Cygnus
-curl "http://localhost:5080/v1/version"
+curl -X GET "http://localhost:5080/v1/version"
 
-curl -X GET "http://localhost:5055/notify"
 
 curl -X GET "http://localhost:5050/notify"
-
-
 
 curl -X GET "http://localhost:5080/v1/stats"
 
@@ -321,59 +287,114 @@ SUBCRIPTCIONES CREADAS EN ORION POR CYGNUS
 curl -X GET "http://localhost:1026/v2/subscriptions/"
 
 NOTIFICATION EXAMPLE
-curl -X GET 'http://localhost:5055'
+curl http://localhost:5055/notify
 
 CONFIGURACION DE ORION PARA LLAMADAS CYGNUS (ORIGINAL Room)
 curl -X POST 'http://localhost:1026/v2/subscriptions/' \
 -H 'Content-Type: application/json' \
 -d '{
-  "description": "Suscripción a Cygnus AirQuality",
+  "description": "Suscripción a Cygnus Room",
   "subject": {
-    "entities": [{"idPattern": ".*", "type": "AirQuality"}]
+    "entities": [{"idPattern": ".*", "type": ".*"}]
   },
   "notification": {
-    "http": {"url": "http://cygnus:5055/notify"},
-    "attrs": ["Temperature", "Humidity","AirQuality","Location"],
+    "http": {"url": "http://localhost:5055/notify"},
+    "attrs": ["temperature", "pressure"],
     "metadata": ["timestamp"]
   },
   "throttling": 5
 }'
 
+CONFIGURACION DE ORION PARA LLAMADAS CYGNUS (MIS ENTIDADES)
+curl -X POST 'http://localhost:1026/v2/subscriptions/' \
+-H 'Content-Type: application/json' \
+-d '{
+  "description": "Suscripción a Cygnus multiSensor",
+  "subject": {
+    "entities": [{"idPattern": ".*", "type": ".*"}]
+  },
+  "notification": {
+    "http": {"url": "http://cygnus:5055/notify"},
+    "attrs": ["humidity", "luminosity","temperature","location"],
+    "metadata": ["timestamp"]
+  },
+  "throttling": 5
+}'
 
-SUBCRIPTCION CYGNUS A ORION CB
-curl -X POST "http://localhost:1026/v2/subscriptions" \
-  -H "Content-Type: application/json" \
-  -H "Fiware-Service: iot_ul_service" \
-  -H "Fiware-ServicePath: /iot_ul" \
-  -d '{
-    "description": "Cygnus subscription",
-    "subject": {
-      "entities": [
-        { "idPattern": ".*", "type": "AirQuality" }
-      ],
-      "condition": {
-        "attrs": ["Temperature", "Humidity", "AirQuality", "Location"]
+curl -X POST 'http://localhost:5055/notify' \
+-H 'Content-Type: application/json' \
+-d '{
+  "data": [
+    {
+      "id": "Room1",
+      "type": "Room",
+      "temperature": {
+        "type": "Number",
+        "value": 23.5,
+        "metadata": {}
       }
+    }
+  ]
+}'
+
+
+SUBCRIPCION CYGNUS DE LA ENTIDAD Room1
+curl -iX POST 'http://localhost:1026/v2/subscriptions/' -H 'Content-Type: application/json' -d '{
+  "description": "Enviar cambios de sensor001 a Cygnus",
+  "subject": {
+    "entities": [
+      {
+        "id": "Room1",
+        "type": "Room"
+      }
+    ],
+    "condition": {
+      "attrs": ["temperature", "pressure"]
+    }
+  },
+  "notification": {
+    "http": {
+      "url": "http://localhost:5055/notify"
     },
-    "notification": {
-      "http": {
-        "url": "http://localhost:5080/notify"
-      },
-      "attrsFormat": "legacy"
+    "attrsFormat": "keyValues"
+  },
+  "throttling": 1
+}'
+
+ESTADO DE LA ENTIDAD
+curl -X GET "http://localhost:1026/v2/entities"
+
+curl -iX PATCH 'http://localhost:1026/v2/entities/Room1/attrs/' 
+-H 'Content-Type: application/json' 
+-d '{
+  "temperature": {
+    "value": 33
+  },
+  "pressure": {
+    "value": 70
+  }
+}'
+
+curl -X GET 'http://localhost:1026/v2/subscriptions' -H 'Accept: application/json' | jq .
+curl -X GET 'http://localhost:8666/version'
+
+curl -iX POST 'http://localhost:1026/v2/subscriptions/' 
+-H 'Content-Type: application/json' 
+-d '{
+  "description": "Enviar todas las modificaciones a PostgreSQL",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*", 
+        "typePattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "http": {
+      "url": "http://localhost:5055/notify"
     },
-    "throttling": 5
-  }'
-
-
-
-
-
-************************************************************************
-***********************************************************************
-                          STH Comet
-************************************************************************
-***********************************************************************
-
-curl -X GET "http://localhost:8666/STH/v1/contextEntities/type/AirQuality/id/AirQuality0001/attributes/Temperature?lastN=10" \
-  -H "Fiware-Service: iot_ul_service" \
-  -H "Fiware-ServicePath: /iot_ul"
+    "attrsFormat": "keyValues"
+  },
+  "throttling": 1
+}'
