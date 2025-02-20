@@ -3,9 +3,9 @@ networks:
     driver: bridge
 
 volumes:
-    mongoDBOrionPersist: ~
-    mongoDBCygnus: ~
-    postgresDBOrion: ~
+    mongoDBOrionPersist:
+    mongoDBCygnus:
+    postgresDBOrion:
     mosquitto:
 
 services:
@@ -96,6 +96,7 @@ services:
     depends_on:
       - orion
       - postgres
+      - mongo
     ports:
       - "5055:5055"
       - "5080:5080" 
@@ -110,7 +111,10 @@ services:
       - CYGNUS_POSTGRESQL_PASS=1111 # Password for the PostgreSQL database user
       - CYGNUS_POSTGRESQL_SERVICE_PORT =5055
 
-      - CYGNUS_MONGO_HOSTS=localhost:27018
+      - CYGNUS_MONGO_HOSTS=localhost # Hostname of the MongoDB server used to persist historical context data
+      - CYGNUS_MONGO_PORT=27017 # Port that the MongoDB server uses to listen to commands
+      - CYGNUS_MONGO_ENABLE=true # Switch to enable the MongoDB sink
+      - CYGNUS_MONGO_SERVICE_PORT=5051
       - CYGNUS_MONGO_ENABLE_NAME_MAPPINGS=true
       - CYGNUS_MONGO_SERVICE_PORT =5051
 
@@ -121,21 +125,25 @@ services:
     networks:
       - fiware
 
-  # fiware-sth-comet:
-  #   image: telefonicaiot/fiware-sth-comet
-  #   hostname: sth-comet
-  #   container_name: sth-comet
-  #   depends_on:
-  #     - mongo
-  #     - cygnus
-  #   ports:
-  #     - "8666:8666"
-  #   environment:
-  #     - STH_HOST=localhost
-  #     - STH_PORT=8666
-  #     - DB_URI=localhost:27018
-  #   networks:
-  #     - fiware
+  sth-comet:
+    image: telefonicaiot/fiware-sth-comet
+    hostname: sth-comet
+    container_name: sth-comet
+    depends_on:
+      - cygnus
+      - mongo-cygnus
+    ports:
+      - "8666:8666"
+    environment:
+      - STH_HOST=localhost
+      - STH_PORT=8666
+      - DB_PREFIX=sth_
+      - LOGOPS_LEVEL=DEBUG
+      - DATA_MODEL=collection-per-attribute
+      - DB_URI=localhost:27017
+    networks:
+      - fiware
+
 
   mongo-cygnus:
     image: mongo
@@ -146,7 +154,7 @@ services:
     command: 
       --bind_ip_all 
     volumes:
-      - mongoDBCygnus:/data/db
+      - mongoDBCygnus:/data/dbCygnus
     networks:
       - fiware
  
