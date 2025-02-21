@@ -13,7 +13,7 @@ services:
       - "27017:27017"
     command: --nojournal
     volumes:
-      - mongo-db:/data
+      - mongo_data:/data/mongodb
 
   cygnus:
     image: fiware/cygnus-ngsi
@@ -35,12 +35,14 @@ services:
       - "CYGNUS_POSTGRESQL_PASS=password" # Password for the PostgreSQL database user
       - "CYGNUS_POSTGRESQL_ENABLE_CACHE=false" # Switch to enable caching within the PostgreSQL configuration
       - "CYGNUS_POSTGRESQL_SERVICE_PORT=5055" # The port the agent.conf is configured for
+      
       - "CYGNUS_LOG_LEVEL=DEBUG" # The logging level for Cygnus
       - "CYGNUS_SERVICE_PORT=5055" # Notification Port that Cygnus listens to for Postgres subscriptions
       - "CYGNUS_API_PORT=5080" 
-      - "CYGNUS_MONGO_HOSTS= mongodb://localhost:27017"
+      - "CYGNUS_MONGO_HOSTS= mongo"
       - "CYGNUS_MONGO_DB= orion"
       - "CYGNUS_MONGO_SERVICE_PORT=5051"
+      
       - CYGNUS_MYSQL_HOST=mysql
       - CYGNUS_MYSQL_PORT=3306
       - CYGNUS_MYSQL_USER=cygnus
@@ -59,31 +61,55 @@ services:
       - "POSTGRES_USER=postgres"
       - "POSTGRES_DB=orion"
     volumes:
-      - postgres-db:/var/lib/postgresql/data
+      - postgres_data:/data/postgresdb
 
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: orion
-      MYSQL_USER: cygnus
-      MYSQL_PASSWORD: cygnus
-    ports:
-      - "3306:3306"
-    restart: always
+  # mysql:
+  #   image: mysql:5.7
+  #   container_name: mysql
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: orion
+  #     MYSQL_USER: cygnus
+  #     MYSQL_PASSWORD: cygnus
+  #   ports:
+  #     - "3306:3306"
+  #   restart: always
 
   sth-comet:
-    image: telefonicaiot/fiware-sth-comet
-    links:
+    image: fiware/sth-comet:latest
+    container_name: sth-comet
+    restart: always
+    depends_on:
       - mongo
     ports:
       - "8666:8666"
     environment:
-      - STH_HOST=0.0.0.0
-      - DB_URI=localhost:27017
+      - DB_PREFIX=sth_
+      - DB_URI=mongo:27017
+    command: npm start
     
 
+  iot-agent-json:
+    image: fiware/iotagent-json
+    container_name: iot-agent-json
+    restart: always
+    depends_on:
+      - mongo
+    environment:
+      - IOTA_CB_HOST=orion
+      - IOTA_CB_PORT=1026
+      - IOTA_NORTH_PORT=4041
+      - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_MONGO_HOST=mongo
+      - IOTA_MONGO_PORT=27017
+      - IOTA_MONGO_DB=iotagentjson
+      - IOTA_HTTP_PORT=7896
+      - IOTA_PROVIDER_URL=http://iot-agent-json:4041
+    ports:
+      - "4041:4041"
+      - "7896:7896"
+
+    
 volumes:
-  mongo-db: 
-  postgres-db: 
+  mongo_data: 
+  postgres_data: 

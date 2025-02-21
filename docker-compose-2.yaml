@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+
+  mongo-db:
+    image: mongo:4.4
+    container_name: mongo-db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:var/lib/mongodata
+    networks:
+      - fiware-net
+
+  orion:
+    image: fiware/orion:latest
+    container_name: orion
+    restart: always
+    depends_on:
+      - mongo-db
+    ports:
+      - "1026:1026"
+    command: -dbURI mongodb://mongo-db
+    networks:
+      - fiware-net
+
+  sth-comet:
+    image: fiware/sth-comet:latest
+    container_name: sth-comet
+    restart: always
+    depends_on:
+      - mongo-db
+    ports:
+      - "8666:8666"
+    environment:
+      - DB_PREFIX=sth_
+      - DB_URI=mongo-db:27017
+    command: npm start
+    networks:
+      - fiware-net
+
+  cygnus:
+    image: fiware/cygnus-ngsi:latest
+    container_name: cygnus
+    restart: always
+    depends_on:
+      - mongo-db
+      - orion
+    ports:
+      - "5051:5051"
+      - "5055:5055"
+      - "5080:5080" 
+    environment:
+      - CYGNUS_LOG_LEVEL=DEBUG
+      - CYGNUS_MONGO_HOSTS=mongo-db:27017
+      - CYGNUS_MONGO_SERVICE_PREFIX=sth_
+      - CYGNUS_MONGO_DB_PREFIX=sth_
+    networks:
+      - fiware-net
+
+volumes:
+  mongodb_data:
+
+networks:
+  fiware-net:
+    driver: bridge

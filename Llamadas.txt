@@ -9,6 +9,8 @@ SUBSCRIPCIONES EN ORION DE CYGNUS
 http://localhost:1026/v2/subscriptions/
 
 
+
+
 AÑADIR ENTIDADES
 curl -X POST 'http://localhost:1026/v2/entities/' 
 -H 'Content-Type: application/json' 
@@ -37,6 +39,80 @@ BUSCAR ENTIDADES POR ID
 http://localhost:1026/v2/entities/Room1?options=keyValues
 
 http://localhost:1026/v2/entities/Room2?options=keyValues
+
+
+curl -X GET "http://localhost:4041/iot/about"
+
+CREAR UNA ENTIDAD
+curl -X POST "http://localhost:4041/iot/devices"
+  -H "Content-Type: application/json" 
+  -H "fiware-service:iot"
+  -H "fiware-servicepath:/"
+  -d '{
+    "devices": [
+      {
+        "device_id": "sensor001",
+        "entity_name": "sensor001",
+        "entity_type": "sensor",
+        "protocol": "PDI-IoTA-UltraLight",
+        "transport": "HTTP",
+        "attributes": [
+          { "object_id": "t", "name": "temperature", "type": "Number" }
+        ]
+      }
+    ]
+  }'
+
+  curl -X POST "http://localhost:4041/iot/devices"
+  -H "Content-Type: application/json" 
+  -H "fiware-service:iot"
+  -H "fiware-servicepath:/"
+  -d '{
+    "devices": [
+      {
+        "device_id": "sensor002",
+        "entity_name": "sensor002",
+        "entity_type": "sensor",
+        "protocol": "PDI-IoTA-UltraLight",
+        "transport": "HTTP",
+        "attributes": [
+          { "object_id": "t", "name": "temperature", "type": "Number" }
+        ]
+      }
+    ]
+  }'
+
+*******************STH COMET**************************
+
+http://localhost:8666/version
+
+curl -X GET "http://localhost:1026/v2/subscriptions" -H "Accept: application/json"
+
+  curl -X POST "http://localhost:1026/v2/subscriptions" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Suscripción para guardar histórico en STH-Comet",
+    "subject": {
+      "entities": [
+        { "idPattern": ".*"}
+      ]
+    },
+    "notification": {
+      "http": {
+        "url": "http://sth-comet:8666/notify"
+      },
+      "attrsFormat": "keyValues"
+    },
+    "expires": "2040-01-01T00:00:00.00Z",
+    "throttling": 0
+  }'
+
+
+curl -X GET "http://localhost:8666/STH/v1/contextEntities/type/AirQuality/id/AirQuality0001/attributes/Temperature?lastN=10" \
+  -H "Fiware-Service: iot_ul_service" \
+  -H "Fiware-ServicePath: /iot_ul"
+
+curl -X GET "http://localhost:8666/v1/" 
 
 
 ******************* CYGNUS******************************
@@ -103,7 +179,7 @@ curl -iX POST 'http://localhost:1026/v2/entities/Room1/attrs' \
 -H 'Content-Type: application/json' \
 -d '
 {
-    "temperature": {"value": 77}
+    "temperature": {"value": 44}
 }'
 
 curl -X PATCH 'http://localhost:1026/v2/entities/Room1/attrs' \
