@@ -3,11 +3,15 @@ ORION VERSION
 GET http://localhost:1026/version
 
 ENTIDADES DADAS DE ALTA EN ORION
-GET http://localhost:1026/v2/entities/
+curl -X GET "http://localhost:1026/v2/entities/"
+
 
 SUBSCRIPCIONES EN ORION DE CYGNUS
 http://localhost:1026/v2/subscriptions/
 
+
+VERSION STH-COMET
+curl -X GET "http://localhost:8666/version"
 
 
 
@@ -46,8 +50,8 @@ curl -X GET "http://localhost:4041/iot/about"
 CREAR UNA ENTIDAD
 curl -X POST "http://localhost:4041/iot/devices"
   -H "Content-Type: application/json" 
-  -H "fiware-service:iot"
-  -H "fiware-servicepath:/"
+  -H "fiware-service:"
+  -H "fiware-servicepath:"
   -d '{
     "devices": [
       {
@@ -65,8 +69,8 @@ curl -X POST "http://localhost:4041/iot/devices"
 
   curl -X POST "http://localhost:4041/iot/devices"
   -H "Content-Type: application/json" 
-  -H "fiware-service:iot"
-  -H "fiware-servicepath:/"
+  -H "fiware-service:"
+  -H "fiware-servicepath:"
   -d '{
     "devices": [
       {
@@ -84,7 +88,10 @@ curl -X POST "http://localhost:4041/iot/devices"
 
 *******************STH COMET**************************
 
-http://localhost:8666/version
+curl -X GET "http://localhost:8666/STH/v1/"
+curl -X GET "http://localhost:8666/STH/v1/contextEntities/type/Room/id/Room1/attributes/temperature" \
+  -H "Accept: application/json"
+
 
 curl -X GET "http://localhost:1026/v2/subscriptions" -H "Accept: application/json"
 
@@ -170,6 +177,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
 curl -X GET 'http://localhost:1026/v2/subscriptions'
 
 
+curl -X GET "http://localhost:1026/v2/entities/"
 
 http://localhost:1026/v2/entities/Room1?options=keyValues
 http://localhost:1026/v2/entities/?options=keyValues
@@ -179,7 +187,7 @@ curl -iX POST 'http://localhost:1026/v2/entities/Room1/attrs' \
 -H 'Content-Type: application/json' \
 -d '
 {
-    "temperature": {"value": 44}
+    "temperature": {"value": 33}
 }'
 
 curl -X PATCH 'http://localhost:1026/v2/entities/Room1/attrs' \
