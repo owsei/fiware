@@ -130,7 +130,7 @@ http://localhost:5080/v1/version
 SUBSCRIPCIONES EN ORION DE CYGNUS
 http://localhost:1026/v2/subscriptions/
 
-CREAR SUBCRIPCION POSTGRES
+CREAR SUBCRIPCION MONGO
 curl -X POST 'http://localhost:1026/v2/subscriptions/'
 -H 'Content-Type: application/json' 
 -d '{
@@ -150,6 +150,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
   "throttling": 0
 }'
 
+SUBCRIPCION PARA POSTGRES
 curl -X POST 'http://localhost:1026/v2/subscriptions'
 -H 'Content-Type: application/json' 
 -d '{
@@ -187,7 +188,7 @@ curl -iX POST 'http://localhost:1026/v2/entities/Room1/attrs' \
 -H 'Content-Type: application/json' \
 -d '
 {
-    "temperature": {"value": 33}
+    "temperature": {"value": 24}
 }'
 
 curl -X PATCH 'http://localhost:1026/v2/entities/Room1/attrs' \
