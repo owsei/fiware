@@ -1,176 +1,89 @@
-networks:
-  fiware:
-    driver: bridge
-
-volumes:
-    mongoDBOrionPersist:
-    mongoDBCygnus:
-    postgresDBOrion:
-    mosquitto:
-
 services:
   orion:
     image: telefonicaiot/fiware-orion
-    hostname: orion
-    container_name: orion
     ports:
       - "1026:1026"
     depends_on:
       - mongo
-    command: 
-      -dbURI mongodb://mongo
-    networks:
-     - fiware
+    command: -dbURI mongodb://mongo
 
   mongo:
-    image: mongo:4.2
-    hostname: mongo
-    container_name: mongo
+    image: mongo:4.4
     ports:
       - "27017:27017"
-    command: 
-      --nojournal
-      --bind_ip_all 
+    command: --nojournal
     volumes:
-      - mongoDBOrionPersist:/data/db
-    networks:
-      - fiware
-
-  
-  postgres:
-    image: postgres
-    hostname: postgres
-    container_name: postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=postgres_orion
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=1111
-    volumes:
-      - postgresDBOrion:/data/db
-    networks:
-      - fiware
-
-  iot-agent-ul:
-    image: fiware/iotagent-ul
-    hostname: iot-agent-ul
-    container_name: iot-agent-ul
-    depends_on:
-        - orion
-    expose:
-        - "4061"
-        - "7896"
-    ports:
-      - "4061:4061"
-      - "7896:7896"
-    environment:
-      - IOTA_CB_HOST=orion # name of the context broker to update context
-      - IOTA_CB_PORT=1026 # port the context broker listens on to update context
-      - IOTA_NORTH_PORT=4061
-      - IOTA_REGISTRY_TYPE=mongodb #Whether to hold IoT device info in memory or in a database
-      - IOTA_LOG_LEVEL=DEBUG # The log level of the IoT Agent
-      - IOTA_TIMESTAMP=true # Supply timestamp information with each measurement
-      - IOTA_CB_NGSI_VERSION=v2 # use NGSIv2 when sending updates for active attributes
-      - IOTA_AUTOCAST=true # Ensure Ultralight number values are read as numbers not strings
-      - IOTA_MONGO_HOST=mongo # The host name of MongoDB
-      - IOTA_MONGO_PORT=27017 # The port mongoDB is listening on
-      - IOTA_MONGO_DB=iotagentul # The name of the database used in mongoDB
-      - IOTA_HTTP_PORT=7896 # The port where the IoT Agent listens for IoT device traffic over HTTP
-      - IOTA_MQTT_HOST=mosquitto # The host name of the MQTT Broker
-      - IOTA_MQTT_PORT=1883 # The port the MQTT Broker is listening on to receive topics
-      - IOTA_DEFAULT_RESOURCE=/iot/ul # Default is blank. I'm using MQTT so I don't need a resource
-      - IOTA_PROVIDER_URL=http://iot-agent:4061
-      - IOTA_AUTOCREATE=true # Automatically create devices in the context broker
-      
-
-    networks:
-      - fiware
-    healthcheck:
-      test: curl --fail -s "http://iot-agent:4061/iot/about" || exit 1
+      - mongo-db:/data
 
   cygnus:
     image: fiware/cygnus-ngsi
     hostname: cygnus
-    container_name: cygnus
+    container_name: fiware-cygnus
+    networks:
+      - default
     depends_on:
-      - orion
-      - postgres
-      - mongo
+      - postgres-db
     ports:
+      - "5050:5050"
+      - "5051:5051"
       - "5055:5055"
       - "5080:5080" 
     environment:
-      - CYGNUS_ORION_HOST=orion
-      - CYGNUS_ORION_PORT=1026
-      
-      - CYGNUS_POSTGRESQL_HOST=Localhost # Hostname of the PostgreSQL server used to persist historical context data
-      - CYGNUS_POSTGRESQL_PORT=5432 # Port that the PostgreSQL server uses to listen to commands
-      - CYGNUS_POSTGRES_DB=fiware_db # postgres DB
-      - CYGNUS_POSTGRESQL_USER=admin # Username for the PostgreSQL database user
-      - CYGNUS_POSTGRESQL_PASS=1111 # Password for the PostgreSQL database user
-      - CYGNUS_POSTGRESQL_SERVICE_PORT =5055
+      - "CYGNUS_POSTGRESQL_HOST=postgres-db" # Hostname of the PostgreSQL server used to persist historical context data
+      - "CYGNUS_POSTGRESQL_PORT=5432" # Port that the PostgreSQL server uses to listen to commands
+      - "CYGNUS_POSTGRESQL_USER=postgres" # Username for the PostgreSQL database user
+      - "CYGNUS_POSTGRESQL_PASS=password" # Password for the PostgreSQL database user
+      - "CYGNUS_POSTGRESQL_ENABLE_CACHE=false" # Switch to enable caching within the PostgreSQL configuration
+      - "CYGNUS_POSTGRESQL_SERVICE_PORT=5055" # The port the agent.conf is configured for
+      - "CYGNUS_LOG_LEVEL=DEBUG" # The logging level for Cygnus
+      - "CYGNUS_SERVICE_PORT=5055" # Notification Port that Cygnus listens to for Postgres subscriptions
+      - "CYGNUS_API_PORT=5080" 
+      - "CYGNUS_MONGO_HOSTS= mongodb://localhost:27017"
+      - "CYGNUS_MONGO_DB= orion"
+      - "CYGNUS_MONGO_SERVICE_PORT=5051"
+      - CYGNUS_MYSQL_HOST=mysql
+      - CYGNUS_MYSQL_PORT=3306
+      - CYGNUS_MYSQL_USER=cygnus
+      - CYGNUS_MYSQL_PASS=cygnus
+      - CYGNUS_MYSQL_DB=orion
 
-      - CYGNUS_MONGO_HOSTS=localhost # Hostname of the MongoDB server used to persist historical context data
-      - CYGNUS_MONGO_PORT=27017 # Port that the MongoDB server uses to listen to commands
-      - CYGNUS_MONGO_ENABLE=true # Switch to enable the MongoDB sink
-      - CYGNUS_MONGO_SERVICE_PORT=5051
-      - CYGNUS_MONGO_ENABLE_NAME_MAPPINGS=true
-      - CYGNUS_MONGO_SERVICE_PORT =5051
 
+  postgres-db:
+    image: postgres
+    hostname: postgres-db
+    container_name: db-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_PASSWORD=password"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_DB=orion"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
 
-      - CYGNUS_LOG_LEVEL=DEBUG # The logging level for Cygnus
-      - CYGNUS_SERVICE_PORT=5055 # Notification Port that Cygnus listens to for Postgres subscriptions
-      - CYGNUS_API_PORT=5080 # Port that Cygnus listens on for operational reasons
-    networks:
-      - fiware
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: orion
+      MYSQL_USER: cygnus
+      MYSQL_PASSWORD: cygnus
+    ports:
+      - "3306:3306"
+    restart: always
 
   sth-comet:
     image: telefonicaiot/fiware-sth-comet
-    hostname: sth-comet
-    container_name: sth-comet
-    depends_on:
-      - cygnus
-      - mongo-cygnus
+    links:
+      - mongo
     ports:
       - "8666:8666"
     environment:
-      - STH_HOST=localhost
-      - STH_PORT=8666
-      - DB_PREFIX=sth_
-      - LOGOPS_LEVEL=DEBUG
-      - DATA_MODEL=collection-per-attribute
+      - STH_HOST=0.0.0.0
       - DB_URI=localhost:27017
-    networks:
-      - fiware
+    
 
-
-  mongo-cygnus:
-    image: mongo
-    hostname: mongo-cygnus
-    container_name: mongo-cygnus
-    ports:
-      - "27018:27017"
-    command: 
-      --bind_ip_all 
-    volumes:
-      - mongoDBCygnus:/data/dbCygnus
-    networks:
-      - fiware
- 
-
-
-  mosquitto:
-    image: eclipse-mosquitto
-    hostname: mosquitto
-    container_name: mosquitto
-    expose:
-      - "1883"
-      - "9001"
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-    volumes:
-      - mosquitto:/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-    networks:
-      - fiware
+volumes:
+  mongo-db: 
+  postgres-db: 
