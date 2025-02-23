@@ -17,7 +17,8 @@ curl -X GET "http://localhost:8666/version"
 
 AÑADIR ENTIDADES
 curl -X POST 'http://localhost:1026/v2/entities/' 
--H 'Content-Type: application/json' 
+-H 'Content-Type: application/json'
+
 -d '{
         "id":"Room1",
         "type":"Room",
@@ -86,12 +87,202 @@ curl -X POST "http://localhost:4041/iot/devices"
     ]
   }'
 
+
+************************************************************************
+***********************************************************************
+                          IoT Agent
+************************************************************************
+***********************************************************************
+
+SABER SI EL SERVICIO ESTA FUNCIONANDO
+curl -X GET 'http://localhost:4041/iot/about'
+
+*************************************************************************
+CONFIGURAR DISPOSITIVOS JSON EN ORION
+curl -X POST "http://localhost:4041/iot/services" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "services": [{
+      "apikey": "iot-json-key",
+      "cbroker": "http://orion:1026",
+      "entity_type": "DeviceIoTJSON",
+      "resource": "/iot/json",
+      "attributes": [
+        { "object_id": "t", "name": "temperature", "type": "Number" },
+        { "object_id": "h", "name": "humidity", "type": "Number" }
+      ]      
+    }]
+  }'
+**********************************************************************
+REGISTRAR DISPOSITIVOS JSON EN ORION
+curl -X POST "http://localhost:4041/iot/devices" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: openiot" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "devices": [{
+      "device_id": "sensorJSON001",
+      "entity_name": "urn:ngsiJSON:SensorJSON:001",
+      "entity_type": "DeviceIoTJSON",
+      "attributes": [
+        { "object_id": "t", "name": "temperature", "type": "Number" },
+        { "object_id": "h", "name": "humidity", "type": "Number" }
+      ],
+      "protocol": "IoT-JSON",
+      "apikey": "iot-json-key"
+    }]
+  }'
+
+
+RECIBIR MEDIDAS
+curl -iX POST \
+  'http://localhost:7896/iot/json?k=iot-json-key&i=sensorJSON001' \
+  -H 'Content-Type: application/json' \
+  -d '{"t":25.5,"h":55}'
+
+curl -X GET "http://localhost:1026/v2/entities" \
+  -H "Fiware-Service: iotagentjson" \
+  -H "Fiware-ServicePath: /iot/json"
+
+
+*****************************************************************
+************************************************************************
+***********************************************************************
+                          IoT Agent UL
+************************************************************************
+***********************************************************************
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+REGISTRAR UN SERVICIO DE IOT-UL AIR QUALITY
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+curl -iX POST 'http://localhost:4061/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: iot_ul_service' \
+  -H 'fiware-servicepath: /iot_ul' \
+  -d '{
+ "services": [
+   {
+     "apikey":      "iot-json-key",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "AirQuality",
+     "resource":    "/iot/ul"
+   }
+ ]
+}'
+
+REGISTRAR UN SENSOR IOT UL
+curl -X POST 'http://localhost:4061/iot/devices' \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: iot_ul_service" \
+  -H "fiware-servicepath: /iot_ul" \
+  -d '{
+  "devices": [
+    {
+      "device_id": "AirQuality0001",
+      "entity_name": "AirQuality0001",
+      "entity_type": "AirQuality",
+      "protocol":    "IoTA-UltraLight",
+      "transport":   "HTTP",
+      "attributes": [
+        { "object_id": "t", "name": "temperature", "type": "Integer" },
+        { "object_id": "h", "name": "humidity", "type": "Integer" },
+        { "object_id": "q", "name": "airquality", "type": "Integer" },
+        { "object_id": "l", "name": "location", "type": "text" }
+      ],
+      "static_attributes": [
+        { "name": "temperature", "type": "Integer", "value": 0 },
+        { "name": "humidity", "type": "Integer", "value": 0 },
+        { "name": "airquality", "type": "Integer", "value": 0 },
+        { "name": "location", "type": "Text", "value": "0,0" }
+      ],
+      "apikey": "iot-json-key",
+      "autocreate": true
+    }
+  ]
+}' 
+
+curl -X POST 'http://localhost:4061/iot/devices' \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: iot_ul_service" \
+  -H "fiware-servicepath: /iot_ul" \
+  -d '{
+  "devices": [
+    {
+      "device_id": "AirQuality0002",
+      "entity_name": "AirQuality0002",
+      "entity_type": "AirQuality",
+      "protocol":    "IoTA-UltraLight",
+      "transport":   "HTTP",
+      "attributes": [
+        { "object_id": "t", "name": "temperature", "type": "Integer" },
+        { "object_id": "h", "name": "humidity", "type": "Integer" },
+        { "object_id": "q", "name": "airquality", "type": "Integer" },
+        { "object_id": "l", "name": "location", "type": "text" }
+      ],
+      "static_attributes": [
+        { "name": "temperature", "type": "Integer", "value": 0 },
+        { "name": "humidity", "type": "Integer", "value": 0 },
+        { "name": "airquality", "type": "Integer", "value": 0 },
+        { "name": "location", "type": "Text", "value": "0,0" }
+      ],
+      "apikey": "iot-json-key"
+    }
+  ]
+}' 
+
+
+
+ASIGNAR/CAMBIAR DATOS
+curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0001'
+  -H 'Content-Type:text/plain' \
+  -H "Fiware-Service: iot_ul_service" \
+  -H "Fiware-ServicePath: /iot_ul" \
+  -d 't|34|h|50|q|3|gps|42.812847,-1.642932'
+
+curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0002'
+  -H 'Content-Type:text/plain' \
+  -H "Fiware-Service: iot_ul_service" \
+  -H "Fiware-ServicePath: /iot_ul" \
+  -d 't|23|h|55|q|3|gps|42.813288,-1.648511'
+
+
+SABER SI LAS ENTIDADES EN ORION SE CREAN BIEN
+curl -X GET "http://localhost:1026/v2/entities" \
+  -H "Fiware-Service: iot_ul_service" \
+  -H "Fiware-ServicePath: /iot_ul"
+
+SABER SI LAS ENTIDADES EN ORION SE CREAN BIEN
+curl -X GET "http://localhost:1026/v2/types" \
+  -H "Fiware-Service: iot_ul_service" \
+  -H "Fiware-ServicePath: /iot_ul"
+
+
+
 *******************STH COMET**************************
+
+curl -X GET "http://0.0.0.0:8666/notify"
+
+curl -X GET "http://localhost:8666/version"
+
+http://localhost:8090/
+
+curl -X GET \
+  'http://sth-comet:8666/version'
 
 curl -X GET "http://localhost:8666/STH/v1/"
 curl -X GET "http://localhost:8666/STH/v1/contextEntities/type/Room/id/Room1/attributes/temperature" \
   -H "Accept: application/json"
 
+
+
+http://localhost:8666/STH/v2/entities/Room1/attrs/temperature?type=<entityType>&hLimit=3&hOffset=0&dateFrom=2016-01-01T00:00:00.000Z&dateTo=2016-01-31T23:59:59.999Z
+
+
+
+http://localhost:8666/STH/v2/contextEntities
 
 curl -X GET "http://localhost:1026/v2/subscriptions" -H "Accept: application/json"
 
@@ -158,8 +349,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
   "subject": {
     "entities": [
       {
-        "id": "Room1",
-        "type": "Room"
+        "idPattern": ".*"
       }
     ]
   },
@@ -173,7 +363,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
 }'
 
 
-
+**************************************************************************
 
 curl -X GET 'http://localhost:1026/v2/subscriptions'
 

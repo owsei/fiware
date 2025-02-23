@@ -6,6 +6,8 @@ services:
     depends_on:
       - mongo
     command: -dbURI mongodb://mongo
+    networks:
+      - fiware
 
   mongo:
     image: mongo:4.4
@@ -14,13 +16,15 @@ services:
     command: --nojournal
     volumes:
       - mongo_data:/data/mongodb
+    networks:
+      - fiware
 
   cygnus:
     image: fiware/cygnus-ngsi
     hostname: cygnus
     container_name: fiware-cygnus
     networks:
-      - default
+      - fiware
     depends_on:
       - postgres-db
     ports:
@@ -49,6 +53,7 @@ services:
       - CYGNUS_MYSQL_USER=admin
       - CYGNUS_MYSQL_PASS=1111
       - CYGNUS_MYSQL_DB=orion
+    
 
 
   postgres-db:
@@ -63,21 +68,47 @@ services:
       - "POSTGRES_DB=orion"
     volumes:
       - postgres_data:/data/postgresdb
-
+    networks:
+      - fiware
   
 
-  sth-comet:
-    image: fiware/sth-comet:latest
-    container_name: sth-comet
-    restart: always
+  sth:
+    image: telefonicaiot/fiware-sth-comet
+    hostname: sth
+    container_name: sth
     depends_on:
       - mongo
     ports:
       - "8666:8666"
     environment:
+      - STH_HOST=0.0.0.0
+      - STH_PORT=8666
       - DB_PREFIX=sth_
       - DB_URI=mongo:27017
-    command: npm start
+      - LOGOPS_LEVEL=DEBUG
+    command: 
+      npm start
+    networks:
+      - fiware
+  
+  # sth-comet:
+  #   image: fiware/sth-comet
+  #   hostname: sth-comet
+  #   container_name: fiware-sth-comet
+  #   depends_on:
+  #       - mongo
+  #   networks:
+  #       - default
+  #   ports:
+  #       - "8666:8666"
+  #   environment:
+  #       - STH_HOST=0.0.0.0
+  #       - STH_PORT=8666
+  #       - DB_PREFIX=sth_
+  #       - DB_URI=mongo-db:27017
+  #       - LOGOPS_LEVEL=DEBUG
+  #   networks:
+  #     - fiware
     
 
   iot-agent-json:
@@ -99,6 +130,8 @@ services:
     ports:
       - "4041:4041"
       - "7896:7896"
+    networks:
+      - fiware
 
   mysql:
     image: mysql:latest
@@ -113,8 +146,14 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - fiware
     
 volumes:
   mongo_data: 
   postgres_data:
   mysql_data:
+
+networks:
+  fiware:
+    driver: bridge
