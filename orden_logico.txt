@@ -1,0 +1,65 @@
+COMPROBAR QUE IOT AGENT ESTE ACTIVO
+curl -X GET 'http://localhost:4041/iot/about'
+
+
+
+APROVISIONAMIENTO DE UN GRUPO DE DISPOSITIVOS
+curl -iX POST \
+  'http://localhost:4041/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: pamplona' \
+  -H 'fiware-servicepath: /movilidad' \
+  -d '{
+ "services": [
+   {
+     "apikey":      "22222222222",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "Movilidad",
+     "resource":    "/iot/json"
+   }
+ ]
+}'
+
+
+APROVISIONAMIENTO DE UN DISPOSITIVOS
+curl -iX POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: pamplona' \
+  -H 'fiware-servicepath: /movilidad' \
+  -d '{
+ "devices": [
+   {
+     "device_id":   "Movilidad001",
+     "entity_name": "urn:ngsi-v2:Movilidad:001",
+     "entity_type": "Movilidad",
+     "timezone":    "Europe/Berlin",
+     "attributes": [
+       { "object_id": "t", "name": "temperature", "type": "Integer" }
+     ],
+     "static_attributes": [
+     ]
+   }
+ ]
+}
+'
+
+
+DUMMY DATA FOR motion001
+curl -iX POST \
+  'http://localhost:7896/iot/json?k=22222222222&i=Movilidad001' \
+  -H 'Content-Type: application/json' \
+  -d '{"t": "24"}'
+
+
+
+curl -X GET \
+  'http://localhost:1026/v2/entities/' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+
+
+
+  curl -X GET \
+  'http://localhost:1026/v2/entities/Movilidad:Movilidad001?type=Movilidad' \
+  -H 'fiware-service: pamplona' 

@@ -46,13 +46,16 @@ services:
       
       - "CYGNUS_MONGO_HOSTS= localhost:27017"
       - "CYGNUS_MONGO_DB= orion"
+      - "CYGNUS_MONGO_USER ="
+      - "CYGNUS_MONGO_PASS="
+
       - "CYGNUS_MONGO_SERVICE_PORT=5051"
       
-      - CYGNUS_MYSQL_HOST=mysql
-      - CYGNUS_MYSQL_PORT=3306
-      - CYGNUS_MYSQL_USER=admin
-      - CYGNUS_MYSQL_PASS=1111
-      - CYGNUS_MYSQL_DB=orion
+      - "CYGNUS_MYSQL_HOST = mysql"
+      - "CYGNUS_MYSQL_DB = orion"
+      - "CYGNUS_MYSQL_PORT = 3306"
+      - "CYGNUS_MYSQL_USER = admin"
+      - "CYGNUS_MYSQL_PASS = 1111"
     
 
 
@@ -71,6 +74,25 @@ services:
     networks:
       - fiware
   
+  postgis:
+    image: postgis/postgis
+    volumes:
+      - postgis-data:/var/lib/postgresql
+      - dbbackups:/backups
+    environment:
+      # If you need to create multiple database you can add coma separated databases eg gis,data
+      - POSTGRES_DB=gis
+      - POSTGRES_USER=docker
+      - POSTGRES_PASS=docker
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+      - RUN_AS_ROOT=true
+    ports:
+      - "25432:5432"
+    restart: on-failure
+    healthcheck:
+      test: "PGPASSWORD=docker pg_isready -h 127.0.0.1 -U docker -d gis"
 
   sth:
     image: telefonicaiot/fiware-sth-comet
@@ -91,26 +113,6 @@ services:
     networks:
       - fiware
   
-  # sth-comet:
-  #   image: fiware/sth-comet
-  #   hostname: sth-comet
-  #   container_name: fiware-sth-comet
-  #   depends_on:
-  #       - mongo
-  #   networks:
-  #       - default
-  #   ports:
-  #       - "8666:8666"
-  #   environment:
-  #       - STH_HOST=0.0.0.0
-  #       - STH_PORT=8666
-  #       - DB_PREFIX=sth_
-  #       - DB_URI=mongo-db:27017
-  #       - LOGOPS_LEVEL=DEBUG
-  #   networks:
-  #     - fiware
-    
-
   iot-agent-json:
     image: fiware/iotagent-json
     container_name: iot-agent-json
@@ -122,11 +124,17 @@ services:
       - IOTA_CB_PORT=1026
       - IOTA_NORTH_PORT=4041
       - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_LOG_LEVEL=DEBUG
+      - IOTA_TIMESTAMP=true
+      - IOTA_CB_NGSI_VERSION=v2
+      - IOTA_AUTOCAST=true
       - IOTA_MONGO_HOST=mongo
       - IOTA_MONGO_PORT=27017
-      - IOTA_MONGO_DB=iotagentjson
+      - IOTA_MONGO_DB=orion
       - IOTA_HTTP_PORT=7896
       - IOTA_PROVIDER_URL=http://iot-agent-json:4041
+      - IOTA_DEFAULT_RESOURCE=/iot/json
+      
     ports:
       - "4041:4041"
       - "7896:7896"
@@ -134,11 +142,12 @@ services:
       - fiware
 
   mysql:
-    image: mysql:latest
-    container_name: mi_mysql
+    image: mysql
+    hostname: mysql
+    container_name: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 1701
+      MYSQL_ROOT_PASSWORD: 1111
       MYSQL_DATABASE: orion
       MYSQL_USER: admin
       MYSQL_PASSWORD: 1111
@@ -148,7 +157,29 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - fiware
-    
+  
+  tutorial:
+    image: fiware/tutorials.context-provider
+    hostname: iot-sensors
+    container_name: fiware-tutorial
+    expose:
+        - "3000"
+        - "3001"
+    ports:
+        - "3000:3000"
+        - "3001:3001"
+    environment:
+        - "DEBUG=tutorial:*"
+        - "PORT=3000"
+        - "IOTA_HTTP_HOST=iot-agent"
+        - "IOTA_HTTP_PORT=7896"
+        - "DUMMY_DEVICES_PORT=3001"
+        - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
+        - "DUMMY_DEVICES_TRANSPORT=HTTP"
+        - "DUMMY_DEVICES_PAYLOAD=JSON"
+    networks:
+      - fiware
+
 volumes:
   mongo_data: 
   postgres_data:
