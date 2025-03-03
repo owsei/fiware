@@ -216,7 +216,7 @@ curl -iX POST 'http://localhost:4061/iot/services' \
 REGISTRAR UN SENSOR IOT UL
 
 curl -L -X POST 'http://localhost:4061/iot/devices' \
-    -H 'fiware-service: pamplonaUL' \
+    -H 'fiware-service: pamplona' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
 --data-raw '{
@@ -435,7 +435,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
   -H "Fiware-Service: pamplona" 
   -H "Fiware-ServicePath: /" \
 -d '{
-  "description": "Notify Cygnus of changes in JSON",
+  "description": "Notify Cygnus of changes in IoT Agent",
   "subject": {
     "entities": [
       {

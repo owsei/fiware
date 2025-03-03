@@ -8,7 +8,7 @@ curl -iX POST \
   'http://localhost:4041/iot/services' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: pamplona' \
-  -H 'fiware-servicepath: /movilidad' \
+  -H 'fiware-servicepath: /' \
   -d '{
  "services": [
    {
@@ -26,12 +26,12 @@ curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: pamplona' \
-  -H 'fiware-servicepath: /movilidad' \
+  -H 'fiware-servicepath: /' \
   -d '{
  "devices": [
    {
-     "device_id":   "Movilidad001",
-     "entity_name": "urn:ngsi-v2:Movilidad:001",
+     "device_id":   "Movilidad002",
+     "entity_name": "Movilidad002",
      "entity_type": "Movilidad",
      "timezone":    "Europe/Berlin",
      "attributes": [
@@ -44,12 +44,38 @@ curl -iX POST \
 }
 '
 
+SUBCRIPCION PARA POSTGRES
+curl -X POST 'http://localhost:1026/v2/subscriptions'
+  -H 'Content-Type: application/json' 
+  -H "Fiware-Service: pamplona" 
+  -H "Fiware-ServicePath: /" \
+-d '{
+  "description": "Notify Cygnus of changes in IoT Agent",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ],
+    "condition": {
+      "attrs": ["temperature"]
+    }
+  },
+  "notification": {
+    "http": {
+      "url": "http://cygnus:5080/v2/notify"
+    },
+    "attrsFormat": "values"
+  },
+  "throttling": 0
+}'
+
 
 DUMMY DATA FOR motion001
 curl -iX POST \
-  'http://localhost:7896/iot/json?k=22222222222&i=Movilidad001' \
+  'http://localhost:7896/iot/json?k=22222222222&i=Movilidad002' \
   -H 'Content-Type: application/json' \
-  -d '{"t": "24"}'
+  -d '{"t": "16"}'
 
 
 
