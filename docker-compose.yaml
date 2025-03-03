@@ -1,6 +1,6 @@
 services:
   orion:
-    image: telefonicaiot/fiware-orion
+    image: fiware/orion
     ports:
       - "1026:1026"
     depends_on:
@@ -15,7 +15,7 @@ services:
       - "27017:27017"
     command: --nojournal
     volumes:
-      - mongo_data:/data/mongodb
+      - mongo_data:/data/db
     networks:
       - fiware
 
@@ -35,6 +35,7 @@ services:
     environment:
       - "CYGNUS_POSTGRESQL_HOST=postgres-db" # Hostname of the PostgreSQL server used to persist historical context data
       - "CYGNUS_POSTGRESQL_PORT=5432" # Port that the PostgreSQL server uses to listen to commands
+      - "CYGNUS_POSTGRESQL_DATABASE=postgres"
       - "CYGNUS_POSTGRESQL_USER=postgres" # Username for the PostgreSQL database user
       - "CYGNUS_POSTGRESQL_PASS=password" # Password for the PostgreSQL database user
       - "CYGNUS_POSTGRESQL_ENABLE_CACHE=false" # Switch to enable caching within the PostgreSQL configuration
@@ -59,29 +60,28 @@ services:
     
 
 
-  postgres-db:
-    image: postgres
-    hostname: postgres-db
-    container_name: db-postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - "POSTGRES_PASSWORD=password"
-      - "POSTGRES_USER=postgres"
-      - "POSTGRES_DB=orion"
-    volumes:
-      - postgres_data:/data/postgresdb
-    networks:
-      - fiware
+  # postgres-db:
+  #   image: postgres
+  #   hostname: postgres-db
+  #   container_name: db-postgres
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - "POSTGRES_PASSWORD=password"
+  #     - "POSTGRES_USER=postgres"
+  #     - "POSTGRES_DB=orion"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - fiware
   
   postgis:
     image: postgis/postgis
-    volumes:
-      - postgis-data:/var/lib/postgresql
-      - dbbackups:/backups
+    hostname: postgis
+    container_name: postgis
     environment:
       # If you need to create multiple database you can add coma separated databases eg gis,data
-      - POSTGRES_DB=gis
+      - POSTGRES_DB=orion
       - POSTGRES_USER=docker
       - POSTGRES_PASS=docker
       - ALLOW_IP_RANGE=0.0.0.0/0
@@ -91,6 +91,9 @@ services:
     ports:
       - "25432:5432"
     restart: on-failure
+    volumes:
+      - postgis-data:/var/lib/postgresql
+      - dbbackups:/backups
     healthcheck:
       test: "PGPASSWORD=docker pg_isready -h 127.0.0.1 -U docker -d gis"
 
@@ -115,6 +118,7 @@ services:
   
   iot-agent-json:
     image: fiware/iotagent-json
+    hostname: iot-agent-json
     container_name: iot-agent-json
     restart: always
     depends_on:
@@ -133,18 +137,42 @@ services:
       - IOTA_MONGO_DB=orion
       - IOTA_HTTP_PORT=7896
       - IOTA_PROVIDER_URL=http://iot-agent-json:4041
+      - IOTA_AUTOCAST=true
       - IOTA_DEFAULT_RESOURCE=/iot/json
-      
     ports:
       - "4041:4041"
       - "7896:7896"
     networks:
       - fiware
 
+  iot-agent-ul:
+    image: fiware/iotagent-ul
+    hostname: iot-agent-ul
+    container_name: fiware-iot-agent
+    depends_on:
+      - mongo
+    ports:
+      - "4061:4061"
+      - "7897:7897"
+    environment:
+      - "IOTA_CB_HOST=orion"
+      - "IOTA_CB_PORT=1026"
+      - "IOTA_NORTH_PORT=4061"
+      - "IOTA_REGISTRY_TYPE=mongodb"
+      - "IOTA_LOG_LEVEL= DEBUG"
+      - "IOTA_TIMESTAMP=true"
+      - "IOTA_MONGO_HOST=mongo"
+      - "IOTA_MONGO_PORT=27017"
+      - "IOTA_MONGO_DB=orion"
+      - "IOTA_HTTP_PORT=7897"
+      - "IOTA_PROVIDER_URL=http://iot-agent:4061"
+      - "IOTA_AUTOCAST=true"
+    networks:
+      - fiware
+  
   mysql:
-    image: mysql
-    hostname: mysql
-    container_name: mysql
+    image: mysql:latest
+    container_name: mi_mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 1111
@@ -157,26 +185,66 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - fiware
-  
-  tutorial:
-    image: fiware/tutorials.context-provider
-    hostname: iot-sensors
-    container_name: fiware-tutorial
-    expose:
-        - "3000"
-        - "3001"
-    ports:
-        - "3000:3000"
-        - "3001:3001"
+
+
+  perseo-core:
+    image: fiware/perseo-core
     environment:
-        - "DEBUG=tutorial:*"
-        - "PORT=3000"
-        - "IOTA_HTTP_HOST=iot-agent"
-        - "IOTA_HTTP_PORT=7896"
-        - "DUMMY_DEVICES_PORT=3001"
-        - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
-        - "DUMMY_DEVICES_TRANSPORT=HTTP"
-        - "DUMMY_DEVICES_PAYLOAD=JSON"
+        - PERSEO_FE_URL=http://perseo-fe:9090
+        - MAX_AGE=6000
+    networks:
+        - perseo
+    depends_on:
+        - perseo-mongo
+    deploy:
+        replicas: 1
+        restart_policy:
+            condition: on-failure
+    
+  perseo-fe:
+    image: fiware/perseo
+    networks:
+        perseo:
+        fiware:
+    ports:
+        - 9090:9090
+        - 8080:8080
+    depends_on:
+        - perseo-core
+    environment:
+        - PERSEO_MONGO_ENDPOINT=perseo-mongo
+        - PERSEO_CORE_URL=http://perseo-core:8080
+        - PERSEO_LOG_LEVEL=debug
+        - PERSEO_ORION_URL=http://orion:1026/
+    deploy:
+        replicas: 1
+        restart_policy:
+            condition: on-failure
+   
+  perseo-mongo:
+    image: mongo:4.2
+    volumes:
+        - ./mongodata:/data/db
+    networks:
+        - perseo
+    deploy:
+        replicas: 1
+        restart_policy:
+            condition: on-failure
+
+  # PostgreSQL con extensión PostGIS
+  postgres-db:
+    image: postgis/postgis
+    hostname: postgres-db
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: orion
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - fiware
 
@@ -184,7 +252,10 @@ volumes:
   mongo_data: 
   postgres_data:
   mysql_data:
+  postgis-data:
+  dbbackups:
 
 networks:
   fiware:
     driver: bridge
+  perseo:
