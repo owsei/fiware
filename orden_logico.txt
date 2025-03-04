@@ -14,7 +14,7 @@ curl -iX POST \
    {
      "apikey":      "22222222222",
      "cbroker":     "http://orion:1026",
-     "entity_type": "Movilidad",
+     "entity_type": "Device",
      "resource":    "/iot/json"
    }
  ]
@@ -30,9 +30,9 @@ curl -iX POST \
   -d '{
  "devices": [
    {
-     "device_id":   "Movilidad002",
-     "entity_name": "Movilidad002",
-     "entity_type": "Movilidad",
+     "device_id":   "Movilidad001",
+     "entity_name": "Movilidad001",
+     "entity_type": "Device",
      "timezone":    "Europe/Berlin",
      "attributes": [
        { "object_id": "t", "name": "temperature", "type": "Integer" }
@@ -45,6 +45,7 @@ curl -iX POST \
 '
 
 SUBCRIPCION PARA POSTGRES
+SUBCRIPCION PARA POSTGRES
 curl -X POST 'http://localhost:1026/v2/subscriptions'
   -H 'Content-Type: application/json' 
   -H "Fiware-Service: pamplona" 
@@ -56,16 +57,12 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
       {
         "idPattern": ".*"
       }
-    ],
-    "condition": {
-      "attrs": ["temperature"]
-    }
+    ]
   },
   "notification": {
     "http": {
-      "url": "http://cygnus:5080/v2/notify"
-    },
-    "attrsFormat": "values"
+      "url": "http://cygnus:5055/notify"
+    }
   },
   "throttling": 0
 }'
@@ -73,9 +70,9 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
 
 DUMMY DATA FOR motion001
 curl -iX POST \
-  'http://localhost:7896/iot/json?k=22222222222&i=Movilidad002' \
+  'http://localhost:7896/iot/json?k=22222222222&i=Movilidad001' \
   -H 'Content-Type: application/json' \
-  -d '{"t": "16"}'
+  -d '{"t": "25"}'
 
 
 
