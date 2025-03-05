@@ -97,9 +97,9 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
 
 DUMMY DATA FOR motion001
 curl -iX POST \
-  'http://localhost:7896/iot/json?k=22222222222&i=Parking002' \
+  'http://localhost:7896/iot/json?k=111111111&i=Movilidad001' \
   -H 'Content-Type: application/json' \
-  -d '{"t": "22"}'
+  -d '{"t": "21"}'
 
 
 
