@@ -439,7 +439,8 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
   "subject": {
     "entities": [
       {
-        "idPattern": ".*"
+        "idPattern": ".*",
+        "type": "Device"
       }
     ]
   },

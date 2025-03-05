@@ -55,7 +55,8 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
   "subject": {
     "entities": [
       {
-        "idPattern": ".*"
+        "idPattern": ".*",
+        "type": "Movilidad"
       }
     ]
   },
@@ -72,7 +73,7 @@ DUMMY DATA FOR motion001
 curl -iX POST \
   'http://localhost:7896/iot/json?k=22222222222&i=Movilidad001' \
   -H 'Content-Type: application/json' \
-  -d '{"t": "25"}'
+  -d '{"t": "23"}'
 
 
 

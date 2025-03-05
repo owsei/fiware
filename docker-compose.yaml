@@ -33,7 +33,7 @@ services:
     environment:
       - "CYGNUS_POSTGRESQL_HOST=postgres-db" # Hostname of the PostgreSQL server used to persist historical context data
       - "CYGNUS_POSTGRESQL_PORT=5432" # Port that the PostgreSQL server uses to listen to commands
-      - "CYGNUS_POSTGRESQL_DATABASE=postgres"
+      - "CYGNUS_POSTGRESQL_DATABASE=orion"
       - "CYGNUS_POSTGRESQL_USER=postgres" # Username for the PostgreSQL database user
       - "CYGNUS_POSTGRESQL_PASS=password" # Password for the PostgreSQL database user
       - "CYGNUS_POSTGRESQL_ENABLE_CACHE=false" # Switch to enable caching within the PostgreSQL configuration
@@ -41,6 +41,8 @@ services:
       - "CYGNUS_POSTGRESQL_ATTR_PERSISTENCE=row"
       - "CYGNUS_POSTGRESQL_SERVICE=orion"
       - "CYGNUS_POSTGRESQL_ENABLE=true"
+      - "CYGNUS_POSTGRESQL_ATTR_TABLE_NAME=iot_readings"  # Fuerza el uso de una tabla única
+      - CYGNUS_POSTGRESQL_ATTR_FIELDS="recvtimets, recvtime, fiwareservicepath, entityid, entitytype, attrname, attrtype, attrvalue, attrmd" # Define columnas
       
       - "CYGNUS_LOG_LEVEL=DEBUG" # The logging level for Cygnus
       - "CYGNUS_SERVICE_PORT=5055" # Notification Port that Cygnus listens to for Postgres subscriptions
@@ -177,67 +179,67 @@ services:
     networks:
       - fiware
   
-  mysql:
-    image: mysql:latest
-    container_name: mi_mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 1111
-      MYSQL_DATABASE: orion
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: 1111
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - fiware
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mi_mysql
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 1111
+  #     MYSQL_DATABASE: orion
+  #     MYSQL_USER: admin
+  #     MYSQL_PASSWORD: 1111
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   networks:
+  #     - fiware
 
 
-  perseo-core:
-    image: fiware/perseo-core
-    environment:
-        - PERSEO_FE_URL=http://perseo-fe:9090
-        - MAX_AGE=6000
-    networks:
-        - perseo
-    depends_on:
-        - perseo-mongo
-    deploy:
-        replicas: 1
-        restart_policy:
-            condition: on-failure
+  # perseo-core:
+  #   image: fiware/perseo-core
+  #   environment:
+  #       - PERSEO_FE_URL=http://perseo-fe:9090
+  #       - MAX_AGE=6000
+  #   networks:
+  #       - perseo
+  #   depends_on:
+  #       - perseo-mongo
+  #   deploy:
+  #       replicas: 1
+  #       restart_policy:
+  #           condition: on-failure
     
-  perseo-fe:
-    image: fiware/perseo
-    networks:
-        perseo:
-        fiware:
-    ports:
-        - 9090:9090
-        - 8080:8080
-    depends_on:
-        - perseo-core
-    environment:
-        - PERSEO_MONGO_ENDPOINT=perseo-mongo
-        - PERSEO_CORE_URL=http://perseo-core:8080
-        - PERSEO_LOG_LEVEL=debug
-        - PERSEO_ORION_URL=http://orion:1026/
-    deploy:
-        replicas: 1
-        restart_policy:
-            condition: on-failure
+  # perseo-fe:
+  #   image: fiware/perseo
+  #   networks:
+  #       perseo:
+  #       fiware:
+  #   ports:
+  #       - 9090:9090
+  #       - 8080:8080
+  #   depends_on:
+  #       - perseo-core
+  #   environment:
+  #       - PERSEO_MONGO_ENDPOINT=perseo-mongo
+  #       - PERSEO_CORE_URL=http://perseo-core:8080
+  #       - PERSEO_LOG_LEVEL=debug
+  #       - PERSEO_ORION_URL=http://orion:1026/
+  #   deploy:
+  #       replicas: 1
+  #       restart_policy:
+  #           condition: on-failure
    
-  perseo-mongo:
-    image: mongo:4.2
-    volumes:
-        - ./mongodata:/data/db
-    networks:
-        - perseo
-    deploy:
-        replicas: 1
-        restart_policy:
-            condition: on-failure
+  # perseo-mongo:
+  #   image: mongo:4.2
+  #   volumes:
+  #       - ./mongodata:/data/db
+  #   networks:
+  #       - perseo
+  #   deploy:
+  #       replicas: 1
+  #       restart_policy:
+  #           condition: on-failure
 
   # PostgreSQL con extensión PostGIS
   # postgres-db:
