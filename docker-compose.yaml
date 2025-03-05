@@ -31,6 +31,7 @@ services:
       - "5055:5055"
       - "5080:5080" 
     environment:
+      # - "CYGNUS_POSTGRESQL_SKIP_CONF_GENERATION=false"
       - "CYGNUS_POSTGRESQL_HOST=postgres-db" # Hostname of the PostgreSQL server used to persist historical context data
       - "CYGNUS_POSTGRESQL_PORT=5432" # Port that the PostgreSQL server uses to listen to commands
       - "CYGNUS_POSTGRESQL_DATABASE=orion"
@@ -41,12 +42,13 @@ services:
       - "CYGNUS_POSTGRESQL_ATTR_PERSISTENCE=row"
       - "CYGNUS_POSTGRESQL_SERVICE=orion"
       - "CYGNUS_POSTGRESQL_ENABLE=true"
-      - "CYGNUS_POSTGRESQL_ATTR_TABLE_NAME=iot_readings"  # Fuerza el uso de una tabla única
-      - CYGNUS_POSTGRESQL_ATTR_FIELDS="recvtimets, recvtime, fiwareservicepath, entityid, entitytype, attrname, attrtype, attrvalue, attrmd" # Define columnas
+      - "CYGNUS_POSTGRESQL_DATA_MODEL=dm-by-service-path"
+      # - "CYGNUS_POSTGRESQL_ATTR_TABLE_NAME=iot_readings"  # Fuerza el uso de una tabla única
+      # - CYGNUS_POSTGRESQL_ATTR_FIELDS="recvtimets, recvtime, fiwareservicepath, entityid, entitytype, attrname, attrtype, attrvalue, attrmd" # Define columnas
       
       - "CYGNUS_LOG_LEVEL=DEBUG" # The logging level for Cygnus
       - "CYGNUS_SERVICE_PORT=5055" # Notification Port that Cygnus listens to for Postgres subscriptions
-      - "CYGNUS_API_PORT=5080" 
+      - "CYGNUS_API_PORT=5080"
       
       - "CYGNUS_MONGO_HOSTS= localhost:27017"
       - "CYGNUS_MONGO_DB= orion"
@@ -60,10 +62,12 @@ services:
       - "CYGNUS_MYSQL_PORT = 3306"
       - "CYGNUS_MYSQL_USER = admin"
       - "CYGNUS_MYSQL_PASS = 1111"
-      - "CYGNUS_POSTGRESQL_ATTR_TABLE_NAME=iot_reading"  # Fuerza el uso de una tabla única
-      - "CYGNUS_POSTGRESQL_ATTR_FIELDS=recvtimets, recvtime, fiwareservicepath, entityid, entitytype, attrname, attrtype, attrvalue, attrmd" # Define columnas
-    volumes:
-      - ./agent.conf:/opt/apache-flume/conf/agent.conf
+      - "CYGNUS_MYSQL_DATA_MODEL= dm-by-entity"
+      - "CYGNUS_MYSQL_ATTR_PERSISTENCE=row"
+      
+    # volumes:
+    #   - ./agent.conf:/opt/apache-flume/conf/agent.conf
+    #   # - ./agent_postgresql.conf:/opt/fiware-cygnus/cygnus-ngsi/conf/agent.conf
     networks:
       - fiware
     
@@ -179,21 +183,21 @@ services:
     networks:
       - fiware
   
-  # mysql:
-  #   image: mysql:latest
-  #   container_name: mi_mysql
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: 1111
-  #     MYSQL_DATABASE: orion
-  #     MYSQL_USER: admin
-  #     MYSQL_PASSWORD: 1111
-  #   ports:
-  #     - "3306:3306"
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-  #   networks:
-  #     - fiware
+  mysql:
+    image: mysql
+    container_name: mi_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1111
+      MYSQL_DATABASE: orion
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 1111
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fiware
 
 
   # perseo-core:
