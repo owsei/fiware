@@ -1,0 +1,96 @@
+curl -iX POST \
+  'http://localhost:4041/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: mi_vertical' \
+  -H 'Fiware-ServicePath: /mi_vertical_any_device' \
+  -d '{
+"services": [
+   {
+     "apikey":      "iot-json-key-mi-vertical",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "device",
+     "resource":    "/iot/json"
+   }
+]
+}'
+
+
+curl -iX POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: mi_vertical' \
+  -H 'Fiware-ServicePath: /mi_vertical_any_device' \
+  -d '{
+"devices": [
+   {
+     "device_id":   "Room1",
+     "entity_name": "Room1",
+     "entity_type": "device",
+     "transport":   "HTTP",
+     "attributes": [
+       { "object_id": "t", "name": "temperature", "type": "Float" },
+       { "object_id": "h", "name": "humidity", "type": "Float" }
+     ],
+     "apikey": "iot-json-key",
+     "resource": "/iot/json"
+   }
+]
+}'
+
+
+curl -iX POST \
+  'http://localhost:7896/iot/json?k=iot-json-key-mi-vertical&i=Room1' \
+  -H "Fiware-Service: mi_vertical" \
+  -H "Fiware-ServicePath: /mi_vertical_any_device" \
+  -H 'Content-Type: application/json' \
+  -d '{"t":21,"h":65}'
+
+******************************************************************
+
+
+  curl -iX POST \
+  'http://localhost:4041/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /parking' \
+  -d '{
+    "services": [
+      {
+        "apikey":      "iot-json-key2",
+        "cbroker":     "http://orion:1026",
+        "entity_type": "device",
+        "resource":    "/iot/json"
+      }
+      ]
+    }'
+
+
+curl -iX POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /parking' \
+  -d '{
+"devices": [
+   {
+     "device_id":   "Room2",
+     "entity_name": "Room2",
+     "entity_type": "device",
+     "transport":   "HTTP",
+     "attributes": [
+       { "object_id": "t", "name": "temperature", "type": "Float" },
+       { "object_id": "h", "name": "humidity", "type": "Float" }
+     ],
+     "apikey": "iot-json-key2",
+     "resource": "/iot/json"
+   }
+]
+}'
+
+
+curl -iX POST \
+  'http://localhost:7896/iot/json?k=iot-json-key2&i=Room1' \
+  -H "Fiware-Service: iot_room" \
+  -H "Fiware-ServicePath: /parking" \
+  -H 'Content-Type: application/json' \
+  -d '{"t":23,"h":50}'

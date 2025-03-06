@@ -1,0 +1,146 @@
+curl -iX POST \
+  'http://localhost:4041/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /parking' \
+  -d '{
+"services": [
+   {
+     "apikey":      "iot-json-key",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "device",
+     "resource":    "/iot/json"
+   }
+]
+}'
+
+curl -iX POST \
+  'http://localhost:4041/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /movilidad' \
+  -d '{
+"services": [
+   {
+     "apikey":      "iot-json-key",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "device",
+     "resource":    "/iot/json"
+   }
+]
+}'
+
+
+curl -iX POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /parking' \
+  -d '{
+"devices": [
+   {
+     "device_id":   "Room1",
+     "entity_name": "Room1",
+     "entity_type": "device",
+     "transport":   "HTTP",
+     "attributes": [
+       { "object_id": "t", "name": "temperature", "type": "Float" },
+       { "object_id": "h", "name": "humidity", "type": "Float" }
+     ],
+    "apikey": "iot-json-key"
+   }
+]
+}'
+
+curl -iX POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /movilidad' \
+  -d '{
+"devices": [
+   {
+     "device_id":   "Room1",
+     "entity_name": "Room1",
+     "entity_type": "device",
+     "transport":   "HTTP",
+     "attributes": [
+       { "object_id": "t", "name": "temperature", "type": "Float" },
+       { "object_id": "h", "name": "humidity", "type": "Float" }
+     ],
+    "apikey": "iot-json-key"
+   }
+]
+}'
+
+curl -iX POST \
+  'http://localhost:7896/iot/json?k=iot-json-key&i=Room1' \
+  -H "Fiware-Service: iot_room" \
+  -H "Fiware-ServicePath: /parking" \
+  -H 'Content-Type: application/json' \
+  -d '{"t":18,"h":50}'
+
+  curl -iX POST \
+  'http://localhost:7896/iot/json?k=iot-json-key&i=Room1' \
+  -H "Fiware-Service: iot_room" \
+  -H "Fiware-ServicePath: /movilidad" \
+  -H 'Content-Type: application/json' \
+  -d '{"t":18,"h":50}'
+
+  curl -X GET \
+  'http://localhost:4041/iot/services' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /movilidad'
+
+curl -X GET \
+  'http://localhost:4041/iot/devices' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /movilidad'
+
+
+
+curl -iX POST \
+  'http://localhost:4041/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /movilidad' \
+  -d '{
+"services": [
+   {
+     "apikey":      "iot-json-key",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "device",
+     "resource":    "/iot/json2"
+   }
+]
+}'
+
+
+curl -iX POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'Fiware-Service: iot_room' \
+  -H 'Fiware-ServicePath: /movilidad' \
+  -d '{
+        "devices": [
+            {
+                "device_id":   "Room1",
+                "entity_name": "Room1",
+                "entity_type": "device",
+                "transport":   "HTTP",
+                "attributes": [
+                { "object_id": "t", "name": "temperature", "type": "Float" },
+                { "object_id": "h", "name": "humidity", "type": "Float" }
+                ],
+                "apikey": "iot-json-key",
+                "resource": "/iot/json2"
+            }
+        ]
+    }'
+
+curl -iX POST \
+  'http://localhost:7896/iot/json2?k=iot-json-key&i=Room1' \
+  -H "Fiware-Service: iot_room" \
+  -H "Fiware-ServicePath: /movilidad" \
+  -H 'Content-Type: application/json' \
+  -d '{"t":18,"h":50}'

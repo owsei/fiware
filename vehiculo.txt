@@ -1,0 +1,46 @@
+curl -iX POST 'http://localhost:1026/v2/entities' \
+-H 'Content-Type: application/json' \
+-d '
+{
+    "type": "Vehicle",
+    "id": "Vehicle:Car2",
+    "tirePressure": {
+        "type": "kPa",
+        "value": {
+            "frontRight": 120,
+            "frontLeft": 110,
+            "backRight": 115,
+            "backLeft": 130
+        }
+    },
+    "temperature": {
+        "type": "Number",
+        "value": 26.5,
+        "metadata": {
+            "accuracy": {
+                "type": "Number",
+                "value": 0.9
+            },
+            "average": {
+                "type": "Number",
+                "value": 22.4
+            }
+        }
+    },
+    "location": {
+            "type": "geo:json",
+            "value": {
+                "type": "Point",
+                "coordinates": [
+                    -4.420031,
+                    36.718380
+                ]
+            },
+            "metadata": {}
+    },
+    "lastRevision": {
+    	"type":"DateTime",
+    	"value":"2019-12-27T08:33:00Z"
+    }
+        
+}'

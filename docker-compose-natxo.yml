@@ -1,0 +1,179 @@
+services:
+  orion:
+    image: fiware/orion:3.7.0
+    container_name: orion
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "1026:1026"
+    command: -dbhost mongo -logLevel DEBUG
+    networks:
+      - fiware
+
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    command: --bind_ip_all
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - fiware
+
+  cygnus:
+    image: fiware/cygnus-ngsi
+    hostname: cygnus
+    container_name: fiware-cygnus
+    depends_on:
+      - mongo
+      - postgres
+      - orion
+      - mysql
+    ports:
+      - "5050:5050" # MySQL notifications
+      - "5051:5051" # MongoDB notifications
+      - "5055:5055" # PostgreSQL notifications
+      - "5080:5080" # Management API
+    environment:
+      - "CYGNUS_POSTGRESQL_HOST=postgres"
+      - "CYGNUS_POSTGRESQL_PORT=5432"
+      - "CYGNUS_POSTGRESQL_USER=postgres"
+      - "CYGNUS_POSTGRESQL_PASS=password"
+      - "CYGNUS_POSTGRESQL_ENABLE_CACHE=false"
+      - "CYGNUS_POSTGRESQL_SERVICE_PORT=5055"
+
+      - "CYGNUS_LOG_LEVEL=DEBUG"
+      - "CYGNUS_SERVICE_PORT=5055"
+      - "CYGNUS_API_PORT=5080"
+
+      - "CYGNUS_MONGO_HOSTS=mongo:27017"
+      - "CYGNUS_MONGO_DB=orion"
+      - "CYGNUS_MONGO_SERVICE_PORT=5051"
+
+      - "CYGNUS_MYSQL_HOST=mysql"
+      - "CYGNUS_MYSQL_PORT=3306"
+      - "CYGNUS_MYSQL_USER=admin"
+      - "CYGNUS_MYSQL_PASS=1111"
+      - "CYGNUS_MYSQL_DB=orion"
+    networks:
+      - fiware
+
+  postgres:
+    image: postgres
+    hostname: postgres
+    container_name: db-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=orion
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fiware
+
+  mosquitto:
+    image: eclipse-mosquitto
+    hostname: mosquitto
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+    networks:
+      - fiware
+
+  iot-agent-json:
+    image: fiware/iotagent-json
+    container_name: fiware-iot-agent-json
+    depends_on:
+      - mongo
+      - orion
+    ports:
+      - "4041:4041"
+      - "7896:7896"
+    environment:
+      - IOTA_CB_HOST=orion
+      - IOTA_CB_PORT=1026
+      - IOTA_NORTH_PORT=4041
+      - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_LOG_LEVEL=DEBUG
+      - IOTA_TIMESTAMP=true
+      - IOTA_CB_NGSI_VERSION=v2
+      - IOTA_AUTOCAST=true
+      - IOTA_MONGO_HOST=mongo
+      - IOTA_MONGO_PORT=27017
+      - IOTA_MONGO_DB=iotagent-json
+      - IOTA_HTTP_PORT=7896
+      - IOTA_PROVIDER_URL=http://iot-agent-json:4041
+    networks:
+      - fiware
+
+  iot-agent-ul:
+    image: fiware/iotagent-ul
+    container_name: iot-agent-ul
+    hostname: iot-agent-ul
+    depends_on:
+      - mongo
+      - orion
+      - mosquitto
+    ports:
+      - "4042:4042"
+      - "7897:7897"
+    environment:
+      - IOTA_CB_HOST=orion
+      - IOTA_CB_PORT=1026
+      - IOTA_NORTH_PORT=4042
+      - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_LOG_LEVEL=DEBUG
+      - IOTA_TIMESTAMP=false
+      - IOTA_CB_NGSI_VERSION=v2
+      - IOTA_AUTOCAST=true
+      - IOTA_MONGO_HOST=mongo
+      - IOTA_MONGO_PORT=27017
+      - IOTA_MONGO_DB=iotagentul
+      - IOTA_HTTP_PORT=7897
+      - IOTA_PROVIDER_URL=http://iot-agent-ul:4042
+      - IOTA_MQTT_HOST=mosquitto
+      - IOTA_MQTT_PORT=1883
+      - IOTA_DEFAULT_RESOURCE=/iot/d
+    networks:
+      - fiware
+
+  mysql:
+    image: mysql
+    container_name: mi_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1701
+      MYSQL_DATABASE: orion
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 1111
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fiware
+
+volumes:
+  mongodb_data:
+    name: my_mongo_data
+  postgres_data:
+    name: my_postgres_data
+  mysql_data:
+    name: my_mysql_data
+  mosquitto_data:
+    name: mosquitto_data
+  mosquitto_log:
+    name: mosquitto_log
+
+networks:
+  fiware:
+    driver: bridge

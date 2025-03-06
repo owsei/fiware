@@ -5,7 +5,9 @@ services:
       - "1026:1026"
     depends_on:
       - mongo
-    command: -dbURI mongodb://mongo
+    command: 
+      -dbURI mongodb://mongo
+      -corsOrigin __ALL
     networks:
       - fiware
 
