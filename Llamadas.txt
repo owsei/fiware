@@ -20,6 +20,11 @@ http://localhost:5080/v1/version
 
 
 
+PERSEO
+curl http://localhost:9090/version
+curl  http://localhost:9090/rules
+curl http://localhost:8080/perseo-core/version
+
 
 ********************* ORION *****************************
 ORION VERSION
@@ -476,7 +481,48 @@ curl -iX POST \
 }'
 
 **************************************************************************
+**************************     PERSEO   **********************************
+**************************************************************************
 
+SUBSCRIPCION DE PERSEO EN CB
+
+curl http://LOCALHOST:1026/v2/subscriptions 
+-H 'Content-Type: application/json' \
+-H 'fiware-service: pamplona' \
+-H 'fiware-servicepath: /movilidad' \
+{
+  "description": "Subscription to feed the CEP",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ],
+    "condition": {
+      "attrs": [ ]
+    }
+  },
+  "notification": {
+    "http": {
+      "url": "http://localhost:9090/notices"
+    },
+    "attrs": [
+      "BloodPressure"
+    ]
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+************************************************************************
 curl -X GET 'http://localhost:1026/v2/subscriptions'
 
 
