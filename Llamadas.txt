@@ -25,6 +25,12 @@ curl http://localhost:9090/version
 curl  http://localhost:9090/rules
 curl http://localhost:8080/perseo-core/version
 
+DRACO
+
+https://localhost:9090/nifi/
+
+user: admin - password: pass1234567890
+
 
 ********************* ORION *****************************
 ORION VERSION

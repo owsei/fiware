@@ -28,7 +28,7 @@ services:
     depends_on:
       - postgres-db
     ports:
-      - "5050:5050"
+      # - "5050:5050"
       - "5051:5051"
       - "5055:5055"
       - "5080:5080" 
@@ -108,24 +108,24 @@ services:
       - dbbackups:/backups
     
 
-  sth:
-    image: telefonicaiot/fiware-sth-comet
-    hostname: sth
-    container_name: sth
-    depends_on:
-      - mongo
-    ports:
-      - "8666:8666"
-    environment:
-      - STH_HOST=0.0.0.0
-      - STH_PORT=8666
-      - DB_PREFIX=sth_
-      - DB_URI=mongo:27017
-      - LOGOPS_LEVEL=DEBUG
-    command: 
-      npm start
-    networks:
-      - fiware
+  # sth:
+  #   image: telefonicaiot/fiware-sth-comet
+  #   hostname: sth
+  #   container_name: sth
+  #   depends_on:
+  #     - mongo
+  #   ports:
+  #     - "8666:8666"
+  #   environment:
+  #     - STH_HOST=0.0.0.0
+  #     - STH_PORT=8666
+  #     - DB_PREFIX=sth_
+  #     - DB_URI=mongo:27017
+  #     - LOGOPS_LEVEL=DEBUG
+  #   command: 
+  #     npm start
+  #   networks:
+  #     - fiware
   
   iot-agent-json:
     image: fiware/iotagent-json
@@ -181,19 +181,35 @@ services:
     networks:
       - fiware
   
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mysql
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 1111
+  #     MYSQL_DATABASE: orion
+  #     MYSQL_USER: admin
+  #     MYSQL_PASSWORD: 1111
+  #   ports:
+  #     - "3307:3306"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   networks:
+  #     - fiware
+
   mysql:
-    image: mysql
-    container_name: mysql
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 1111
-      MYSQL_DATABASE: orion
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: 1111
+      - MYSQL_DATABASE=orion
+      - MYSQL_ROOT_PASSWORD=1111
     ports:
-      - "3306:3306"
+      - '3306:3306'
     volumes:
-      - mysql_data:/var/lib/mysql
+        - db:/var/lib/mysql
+        - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - fiware
 
@@ -254,34 +270,46 @@ services:
   # FIN PERSEO
 
 
-  python:
-    image: python:3
-    container_name: python
-    networks:
-      - fiware
+  # python:
+  #   image: python:3
+  #   container_name: python
+  #   networks:
+  #     - fiware
     # volumes:
     #   - pythonCurl.py: 
 
-  nifi:
-    image: apache/nifi:latest
-    container_name: nifi
-    ports:
-      - "8080:8080"
-      - "8443:8443"
+  # nifi:
+  #   image: apache/nifi:latest
+  #   container_name: nifi
+  #   ports:
+  #     - "8080:8080"
+  #     - "8443:8443"
+  #   environment:
+  #     - NIFI_WEB_HTTP_PORT=8080
+  #     - NIFI_WEB_HTTP_HOST= 0.0.0.0
+  #   volumes:
+  #     - ./data/:/data
+  #     - ./driver:/driver
+  #     - ./content_repository:/opt/nifi/nifi-current/content_repository
+  #     - ./database_repository:/opt/nifi/nifi-current/database_repository
+  #     - ./extensions:/opt/nifi/nifi-current/extensions
+  #     - ./flowfile_repopsitory:/opt/nifi/nifi-current/flowfile_respository
+  #     - ./provenance_repository:/opt/nifi/nifi-current/provenance_repository
+  #   networks:
+  #     - fiware
+    
+  draco:
+    image: ging/fiware-draco:2.1.0
+    container_name: draco
     environment:
-      - NIFI_WEB_HTTP_PORT=8080
-      - NIFI_WEB_HTTP_HOST= 0.0.0.0
-    volumes:
-      - ./data/:/data
-      - ./driver:/driver
-      - ./content_repository:/opt/nifi/nifi-current/content_repository
-      - ./database_repository:/opt/nifi/nifi-current/database_repository
-      - ./extensions:/opt/nifi/nifi-current/extensions
-      - ./flowfile_repopsitory:/opt/nifi/nifi-current/flowfile_respository
-      - ./provenance_repository:/opt/nifi/nifi-current/provenance_repository
+      - NIFI_WEB_HTTPS_PORT=9090
+      - SINGLE_USER_CREDENTIALS_USERNAME=admin
+      - SINGLE_USER_CREDENTIALS_PASSWORD=pass1234567890
+    ports:
+      - "9090:9090"
+      - "5050:5050"
     networks:
       - fiware
-    
 
 volumes:
   mongo_data: 
@@ -290,6 +318,8 @@ volumes:
   postgis-data:
   dbbackups:
   mongo_perseo:
+  db:
+    driver: local
 
 networks:
   fiware:
