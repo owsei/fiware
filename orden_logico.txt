@@ -16,7 +16,7 @@ curl -iX POST \
   -d '{
  "services": [
    {
-     "apikey":      "333333333",
+     "apikey":      "11111111111",
      "cbroker":     "http://orion:1026",
      "entity_type": "iot",
      "resource":    "/iot/json"
@@ -30,17 +30,16 @@ curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: pamplona' \
-  -H 'fiware-servicepath: /iot' \
+  -H 'fiware-servicepath: /' \
   -d '{
  "devices": [
    {
-     "device_id":   "Libelium002",
-     "entity_name": "Libelium002",
+     "device_id":   "Libelium001",
+     "entity_name": "Libelium001",
      "entity_type": "iot",
      "timezone":    "Europe/Berlin",
      "attributes": [
-       { "object_id": "temperature", "name": "temperature", "type": "Integer" },
-       { "object_id": "humidity", "name": "humidity", "type": "Integer" }
+       { "object_id": "temperature", "name": "temperature", "type": "Integer" }
      ],
      "static_attributes": [
      ]
@@ -71,17 +70,17 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
   "throttling": 0
 }'
 
-SUBCRIPCION PARA POSTGRES
+SUBCRIPCION CYGNUS PARA POSTGRES
 curl -X POST 'http://localhost:1026/v2/subscriptions'
   -H 'Content-Type: application/json' 
   -H "Fiware-Service: pamplona" 
-  -H "Fiware-ServicePath: /iot" \
+  -H "Fiware-ServicePath: /iot " \
 -d '{
   "description": "Notify Cygnus of changes in IoT Agent Postgress",
   "subject": {
     "entities": [
       {
-        "idPattern": ".*",
+        "idPattern": ".*"
         
       }
     ]
@@ -95,21 +94,46 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
 }'
 
 
+SUBCRIPCION CYGNUS PARA KAFKA
+curl -iX POST \
+  'http://localhost:1026/v2/subscriptions' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: pamplona' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "description": "Notify Cygnus kafka",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "http": {
+      "url": "http://cygnus:5050/notify"
+    }
+  },
+  "throttling": 0
+}'
+
+
+
 DUMMY DATA FOR motion001
 curl -iX POST \
-  'http://localhost:7896/iot/json?k=111111111&i=Movilidad001' \
+  'http://localhost:7896/iot/json?k=11111111111&i=Libelium001' \
   -H 'Content-Type: application/json' \
-  -d '{"t": "20"}'
+  -d '{"t": "29"}'
 
 curl -iX POST \
-  'http://localhost:7896/iot/json?k=333333333&i=Libelium003' \
+  'http://localhost:7896/iot/json?k=11111111111&i=Libelium003' \
   -H 'Content-Type: application/json' \
   -d '{"t": "22","h":50}'
 
 curl -X GET \
   'http://localhost:1026/v2/entities/' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
+  -H 'fiware-service: pamplona' \
+  -H 'fiware-servicepath: /iot'
 
 
 

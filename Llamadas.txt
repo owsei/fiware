@@ -561,3 +561,73 @@ curl -X PATCH 'http://localhost:1026/v2/entities/Room2/attrs' \
 
 
 
+
+**************************************************************************
+***********************   kafka subscription *****************************
+**************************************************************************
+
+curl -X POST 'http://localhost:1026/v2/subscriptions'
+  -H 'Content-Type: application/json' 
+  -H "Fiware-Service: pamplona" 
+  -H "Fiware-ServicePath: /" \
+  -d '
+      {
+          "description": "Subscription to feed the CEP",
+          "subject": {
+            "entities": [
+                {
+                  "type": "Book",
+                  "isPattern": "false",
+                  "id": "Book1"
+                }
+            ],
+            "attributes": [
+            ],
+          }
+          "reference": "http://localhost:5050/notify",
+          "duration": "P1M",
+          "notification": [
+              {
+                  "type": "ONCHANGE",
+                  "condValues": [
+                    "title",
+                    "pages",
+                    "price"
+                  ]
+              }
+          ],
+          "throttling": "PT5S"
+      }'
+
+curl -iX POST \
+  'http://localhost:1026/v2/subscriptions' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: pamplona' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "description": "Notify Cygnus kafka",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "http": {
+      "url": "http://cygnus:5050/notify"
+    }
+  },
+  "throttling": 0
+}'
+
+
+
+
+curl -v GET "http://localhost:8080/nifi"
+
+https://localhost:8443/nifi/#/login
+
+
+Generated Username [bd04dd50-94cd-41bf-a70d-0ddd10d39035]
+Generated Password [DlRBo1s1PCCINK6/WGnyDfWQDkCGgUwT]
