@@ -30,7 +30,7 @@ curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: pamplona' \
-  -H 'fiware-servicepath: /' \
+  -H 'fiware-servicepath: /iot' \
   -d '{
  "devices": [
    {
@@ -74,9 +74,9 @@ SUBCRIPCION CYGNUS PARA POSTGRES
 curl -X POST 'http://localhost:1026/v2/subscriptions'
   -H 'Content-Type: application/json' 
   -H "Fiware-Service: pamplona" 
-  -H "Fiware-ServicePath: /iot " \
+  -H "Fiware-ServicePath: / " \
 -d '{
-  "description": "Notify Cygnus of changes in IoT Agent Postgress",
+  "description": "Notify Cygnus of changes in IoT Draco",
   "subject": {
     "entities": [
       {
@@ -87,43 +87,18 @@ curl -X POST 'http://localhost:1026/v2/subscriptions'
   },
   "notification": {
     "http": {
-      "url": "http://cygnus:5055/notify"
+      "url": "http://localhost:5050/notify"
     }
   },
   "throttling": 0
 }'
-
-
-SUBCRIPCION CYGNUS PARA KAFKA
-curl -iX POST \
-  'http://localhost:1026/v2/subscriptions' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: pamplona' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "description": "Notify Cygnus kafka",
-  "subject": {
-    "entities": [
-      {
-        "idPattern": ".*"
-      }
-    ]
-  },
-  "notification": {
-    "http": {
-      "url": "http://cygnus:5050/notify"
-    }
-  },
-  "throttling": 0
-}'
-
 
 
 DUMMY DATA FOR motion001
 curl -iX POST \
   'http://localhost:7896/iot/json?k=11111111111&i=Libelium001' \
   -H 'Content-Type: application/json' \
-  -d '{"t": "29"}'
+  -d '{"t": "25"}'
 
 curl -iX POST \
   'http://localhost:7896/iot/json?k=11111111111&i=Libelium003' \
@@ -157,3 +132,10 @@ curl -X GET \
 	timeinstant text NULL,
 	timeinstant_md text NULL
 );
+
+
+
+
+curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=temperature001' \
+    -H 'Content-Type: text/plain' \
+    --data-raw 't|24'

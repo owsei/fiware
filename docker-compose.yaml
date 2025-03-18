@@ -135,21 +135,21 @@ services:
     depends_on:
       - mongo
     environment:
-        - IOTA_CB_HOST=orion
-        - IOTA_CB_PORT=1026
-        - IOTA_NORTH_PORT=4041
-        - IOTA_REGISTRY_TYPE=mongodb
-        - IOTA_LOG_LEVEL=DEBUG
-        - IOTA_TIMESTAMP=true
-        - IOTA_CB_NGSI_VERSION=v2
-        - IOTA_AUTOCAST=true
-        - IOTA_MONGO_HOST=mongo
-        - IOTA_MONGO_PORT=27017
-        - IOTA_MONGO_DB=orion
-        - IOTA_HTTP_PORT=7896
-        - IOTA_PROVIDER_URL=http://iot-agent-json:4041
-        - IOTA_AUTOCAST=true
-        - IOTA_DEFAULT_RESOURCE=/iot/json
+      - IOTA_CB_HOST = orion
+      - IOTA_CB_PORT = 1026
+      - IOTA_NORTH_PORT=4041
+      - IOTA_REGISTRY_TYPE=mongodb
+      - IOTA_LOG_LEVEL=DEBUG
+      - IOTA_TIMESTAMP=true
+      - IOTA_CB_NGSI_VERSION=v2
+      - IOTA_AUTOCAST=true
+      - IOTA_MONGO_HOST=mongo
+      - IOTA_MONGO_PORT=27017
+      - IOTA_MONGO_DB=orion
+      - IOTA_HTTP_PORT=7896
+      - IOTA_PROVIDER_URL=http://iot-agent-json:4041
+      - IOTA_AUTOCAST=true
+      - IOTA_DEFAULT_RESOURCE=/iot/json
     ports:
       - "4041:4041"
       - "7896:7896"
@@ -198,18 +198,20 @@ services:
   #     - fiware
 
   mysql:
-    image: mysql:8.0
+    image: mysql
+    restart: always
     cap_add:
       - SYS_NICE
-    restart: always
     environment:
-      - MYSQL_DATABASE=orion
-      - MYSQL_ROOT_PASSWORD=1111
+      MYSQL_ROOT_PASSWORD: 6447
+      MYSQL_DATABASE: orion
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 1111
     ports:
       - '3306:3306'
-    volumes:
-        - db:/var/lib/mysql
-        - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    # volumes:
+    #     - mysql_data:/var/lib/mysql
+    #     - ./mysql_data/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - fiware
 
@@ -308,6 +310,9 @@ services:
     ports:
       - "9090:9090"
       - "5050:5050"
+      - "5055:5055"
+      - "8080:8080"
+      - "8443:8443"
     networks:
       - fiware
 
@@ -318,8 +323,6 @@ volumes:
   postgis-data:
   dbbackups:
   mongo_perseo:
-  db:
-    driver: local
 
 networks:
   fiware:
