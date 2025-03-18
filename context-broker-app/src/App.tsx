@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Menu from './components/Menu';
 
-import ContextBrokerVersion from './components/ContextBrokerVersion';
+import CBVersions from './components/CBVersions';
 
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
     <>
      <Container fluid>
       <Row>
-        <Col><h2>Context Broker CB <ContextBrokerVersion/></h2></Col>
+        <Col><h2>Context Broker CB</h2></Col>
       </Row>
       <Row>
         <Col>
