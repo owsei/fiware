@@ -1,0 +1,90 @@
+###CONFIGURAR DISPOSITIVOS JSON EN ORION IOTs
+### aprovisionar grupo de dispositivos
+
+curl -X POST "http://localhost:4041/iot/services" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: pamplona" \
+  -H "fiware-servicepath: /iots" \
+  -d '{
+    "services": [{
+      "apikey": "iot-json-key",
+      "cbroker": "http://orion:1026",
+      "entity_type": "Device",
+      "resource": "/iot/d"
+    }]
+  }'
+
+
+### aprovisionar un dispositivo
+curl -X POST "http://localhost:4041/iot/devices" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: pamplona" \
+  -H "fiware-servicepath: /iots" \
+  -d '
+    {
+        "devices": 
+        [
+            {
+                "device_id": "sensor002",
+                "entity_name": "DeviceIoTJSON:sensorJSON002",
+                "entity_type": "DeviceIoTJSON",
+                "protocol": "PDI-IoTA-UltraLight",
+                "transport": "HTTP",
+                "attributes": 
+                [
+                { "object_id": "temperature", "name": "temperature", "type": "Number" },
+                { "object_id": "humidity", "name": "humidity", "type": "Number" }
+                ],
+                "static_attributes": 
+                [
+                    {
+                        "name": "location",
+                        "type": "geo:json",
+                        "value": 
+                            {
+                                "type": "Point",
+                                "coordinates": [-1.643159,42.816350] 
+                            }
+                    }
+                ]
+            }
+        ]
+    }'
+
+###SUBCRIPCION DE CYGNUS PARA QUE VEA LOS CAMBIOS
+curl -X POST 'http://localhost:1026/v2/subscriptions/'
+-H 'Content-Type: application/json' 
+-H "Fiware-Service: pamplona" 
+-H "Fiware-ServicePath: /iots"
+-d '{
+  "description": "Notify Cygnus of all context changes",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "http": {
+      "url": "http://cygnus:5055/notify"
+    }
+  },
+  "throttling": 0
+}'
+
+
+
+
+
+###ENVIAR DATOS AL DISPOSITIVO
+
+curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor001' \
+    -H 'Content-Type: text/plain' \
+    --data-raw 't|22|h|57'
+
+###
+
+curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
+    -H 'Content-Type: text/plain' \
+    --data-raw 't|20|h|70'
