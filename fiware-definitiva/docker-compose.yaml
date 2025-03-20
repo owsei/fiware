@@ -60,8 +60,8 @@ services:
       CYGNUS_MYSQL_HOST : mysql
       CYGNUS_MYSQL_DB : orion
       CYGNUS_MYSQL_PORT : 3306
-      CYGNUS_MYSQL_USER : admin
-      CYGNUS_MYSQL_PASS : 1111
+      CYGNUS_MYSQL_USER : root
+      CYGNUS_MYSQL_PASS : 6447
       CYGNUS_MYSQL_DATA_MODEL : dm-by-entity-type-database
       CYGNUS_MYSQL_ATTR_PERSISTENCE: column
       CYGNUS_MYSQL_SERVICE_PORT : 5050

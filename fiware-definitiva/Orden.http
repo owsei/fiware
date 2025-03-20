@@ -1,3 +1,10 @@
+### COSNULTAR GRUPOS DE DISPOSITIVOS YA CONFIGURADOS
+#### HAY QUE CAMBIAR SERVICE Y SERVICEPATH PARA LOS DISTINTOS DISPOSITIVOS
+curl -X GET "http://localhost:1026/v2/entities" \
+  -H "Fiware-Service: pamplona" \
+  -H "Fiware-ServicePath: /iots"
+###
+
 ###CONFIGURAR DISPOSITIVOS JSON EN ORION IOTs
 ### aprovisionar grupo de dispositivos
 
@@ -9,7 +16,7 @@ curl -X POST "http://localhost:4041/iot/services" \
     "services": [{
       "apikey": "iot-json-key",
       "cbroker": "http://orion:1026",
-      "entity_type": "Device",
+      "entity_type": "device",
       "resource": "/iot/d"
     }]
   }'
@@ -25,9 +32,9 @@ curl -X POST "http://localhost:4041/iot/devices" \
         "devices": 
         [
             {
-                "device_id": "sensor002",
-                "entity_name": "DeviceIoTJSON:sensorJSON002",
-                "entity_type": "DeviceIoTJSON",
+                "device_id": "sensor001",
+                "entity_name": "sensor001",
+                "entity_type": "device",
                 "protocol": "PDI-IoTA-UltraLight",
                 "transport": "HTTP",
                 "attributes": 
@@ -57,7 +64,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 -H "Fiware-Service: pamplona" 
 -H "Fiware-ServicePath: /iots"
 -d '{
-  "description": "Notify Cygnus of all context changes",
+  "description": "Notify Cygnus of all context changes Postgres",
   "subject": {
     "entities": [
       {
@@ -73,15 +80,49 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
   "throttling": 0
 }'
 
+#####
+curl -X POST 'http://localhost:1026/v2/subscriptions/'
+-H 'Content-Type: application/json' 
+-H "Fiware-Service: pamplona" 
+-H "Fiware-ServicePath: /iots"
+-d '{
+  "description": "Notify Cygnus of all context changes TO MySQL",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "http": {
+      "url": "http://cygnus:5050/notify"
+    }
+  },
+  "throttling": 0
+}'
 
-
-
+####
+##HAY QUE CREAR LA BASE DE DATOS ANTES DE ESTAS ENTIDADES
+  CREATE TABLE iots_device (
+    recvtimets text NULL,
+    recvtime text NULL,
+    fiwareservicepath text NULL,
+    entityid text NULL,
+    entitytype text NULL,
+    t text NULL,
+    t_md text NULL,
+      h text NULL,
+      h_md text NULL,
+    timeinstant text NULL,
+    timeinstant_md text NULL
+  );
 
 ###ENVIAR DATOS AL DISPOSITIVO
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor001' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|22|h|57'
+    --data-raw 't|19|h|57'
 
 ###
 
