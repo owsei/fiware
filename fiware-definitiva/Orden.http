@@ -5,6 +5,18 @@ curl -X GET "http://localhost:1026/v2/entities" \
   -H "Fiware-ServicePath: /iots"
 ###
 
+curl -X GET "http://localhost:1026/v2/entities/device:sensor001/attrs/?options=keyValues" \
+  -H "Fiware-Service: pamplona" \
+  -H "Fiware-ServicePath: /iots"
+###
+
+### SABER LAS ENTIDADES POR DISPOSITIVO 
+curl -X GET 'http://localhost:1026/v2/entities?type=device&options=keyValues' \
+  -H 'Accept: application/json'\
+  -H "Fiware-Service: pamplona" \
+  -H "Fiware-ServicePath: /iots"
+
+###
 ###CONFIGURAR DISPOSITIVOS JSON EN ORION IOTs
 ### aprovisionar grupo de dispositivos
 
