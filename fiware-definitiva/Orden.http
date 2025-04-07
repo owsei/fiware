@@ -11,7 +11,7 @@ curl -X GET "http://localhost:1026/v2/entities/device:sensor001/attrs/?options=k
 ###
 
 ### SABER LAS ENTIDADES POR DISPOSITIVO 
-curl -X GET 'http://localhost:1026/v2/entities?type=device&options=keyValues' \
+curl -X GET 'http://localhost:1026/v2/entities' \
   -H 'Accept: application/json'\
   -H "Fiware-Service: pamplona" \
   -H "Fiware-ServicePath: /iots"
@@ -45,7 +45,7 @@ curl -X POST "http://localhost:4041/iot/devices" \
         [
             {
                 "device_id": "sensor001",
-                "entity_name": "sensor001",
+                "entity_name": "device",
                 "entity_type": "device",
                 "protocol": "PDI-IoTA-UltraLight",
                 "transport": "HTTP",
@@ -86,7 +86,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
   },
   "notification": {
     "http": {
-      "url": "http://cygnus:5055/notify"
+      "url": "http://draco:5050/v2/notify"
     }
   },
   "throttling": 0
@@ -108,7 +108,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
   },
   "notification": {
     "http": {
-      "url": "http://cygnus:5050/notify"
+      "url": "http://draco:5050/notify"
     }
   },
   "throttling": 0
@@ -124,20 +124,25 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
     entitytype text NULL,
     t text NULL,
     t_md text NULL,
-      h text NULL,
-      h_md text NULL,
+    h text NULL,
+    h_md text NULL,
     timeinstant text NULL,
     timeinstant_md text NULL
   );
 
-###ENVIAR DATOS AL DISPOSITIVO
+###ENVIAR DATOS AL DISPOSITIVO ULTRALIGHT
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor001' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|19|h|57'
+    --data-raw 't|13.3|h|65'
 
 ###
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|20|h|70'
+    --data-raw 't|27.2|h|70'
+###
+
+
+
+{"subscriptionId":"67f3705bc33f3ddafe0bd8ea","data":[{"id":"device:sensor002","type":"device","TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z","metadata":{}},"h":{"type":"Text","value":70,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}},"t":{"type":"Text","value":27.2,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}}}]}

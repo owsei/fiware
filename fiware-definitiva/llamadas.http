@@ -127,8 +127,7 @@ curl -X POST "http://localhost:4041/iot/devices" \
 
 
 ###RECIBIR MEDIDAS
-curl -iX POST \
-  'http://localhost:7896/iot/json?k=iot-json-key&i=Device001' \
+curl -iX POST 'http://localhost:7896/iot/json?k=iot-json-key&i=Device001' \
   -H 'Content-Type: application/json' \
   -d '{"t":23,"h":55}'
 
@@ -287,8 +286,10 @@ curl -iX POST "http://iot-agent:7896/iot/d?i=Device001&k=iot-json-key"
 ###
 ###ASIGNAR/CAMBIAR DATOS
 curl -iX POST 'http://localhost:7897/iot/d?k=iot-json-key&i=Device001'
-  -H 'Content-Type:text/plain' \
-  -d 't|34|h|50|l|42.813288,-1.648511'
+  -H 'Content-Type:text/plain' 
+  -H "Fiware-Service: pamplona"
+  -H "Fiware-ServicePath: /iots"
+  -d 't|34|h|50'
 ###
 
 curl -iX POST 'http://localhost:7896/iot/ul?k=iot-json-key&i=AirQuality0002'
