@@ -1,0 +1,306 @@
+TODAS LAS VARIABLES DE CONFIGURACION DE DOKCER-COMPOSE PARA CYGNUS
+
+
+
+# PostgreSQL options
+ENV CYGNUS_POSTGRESQL_HOST ""
+ENV CYGNUS_POSTGRESQL_PORT ""
+# ENV CYGNUS_POSTGRESQL_USER "" # Warning: For development use only - Storing sensitive information in clear text is insecure
+# ENV CYGNUS_POSTGRESQL_PASS "" # Warning: For development use only - Storing sensitive information in clear text is insecure
+ENV CYGNUS_POSTGRESQL_DATABASE ""
+ENV CYGNUS_POSTGRESQL_SKIP_CONF_GENERATION ""
+ENV CYGNUS_POSTGRESQL_SERVICE_PORT "5055"
+ENV CYGNUS_POSTGRESQL_ENABLE_ENCODING ""
+ENV CYGNUS_POSTGRESQL_ENABLE_NAME_MAPPINGS ""
+ENV CYGNUS_POSTGRESQL_SKIP_NAME_MAPPINGS_GENERATION ""
+ENV CYGNUS_POSTGRESQL_ENABLE_LOWERCASE ""
+ENV CYGNUS_POSTGRESQL_ATTR_PERSISTENCE ""
+ENV CYGNUS_POSTGRESQL_ATTR_NATIVE_TYPES ""
+ENV CYGNUS_POSTGRESQL_BATCH_SIZE ""
+ENV CYGNUS_POSTGRESQL_BATCH_TIMEOUT ""
+ENV CYGNUS_POSTGRESQL_BATCH_TTL ""
+ENV CYGNUS_POSTGRESQL_ENABLE_CACHE ""
+ENV CYGNUS_POSTGRESQL_OPTIONS ""
+
+
+
+
+# MongoDB / STH options
+ENV CYGNUS_MONGO_HOSTS ""
+# ENV CYGNUS_MONGO_USER "" # Warning: For development use only - Storing sensitive information in clear text is insecure
+# ENV CYGNUS_MONGO_PASS "" # Warning: For development use only - Storing sensitive information in clear text is insecure
+ENV CYGNUS_MONGO_REPLICA_SET ""
+ENV CYGNUS_MONGO_AUTH_SOURCE ""
+ENV CYGNUS_MONGO_SKIP_CONF_GENERATION ""
+ENV CYGNUS_MONGO_SERVICE_PORT "5051"
+ENV CYGNUS_MONGO_ENABLE_ENCODING ""
+ENV CYGNUS_MONGO_ENABLE_NAME_MAPPINGS ""
+ENV CYGNUS_MONGO_SKIP_NAME_MAPPINGS_GENERATION ""
+ENV CYGNUS_MONGO_ENABLE_LOWERCASE ""
+ENV CYGNUS_MONGO_DATA_MODEL ""
+ENV CYGNUS_MONGO_ATTR_PERSISTENCE ""
+ENV CYGNUS_MONGO_DB_PREFIX ""
+ENV CYGNUS_MONGO_COLLECTION_PREFIX ""
+ENV CYGNUS_MONGO_BATCH_SIZE ""
+ENV CYGNUS_MONGO_BATCH_TIMEOUT ""
+ENV CYGNUS_MONGO_BATCH_TTL ""
+ENV CYGNUS_MONGO_DATA_EXPIRATION ""
+ENV CYGNUS_MONGO_COLLECTIONS_SIZE ""
+ENV CYGNUS_MONGO_MAX_DOCUMENTS ""
+ENV CYGNUS_MONGO_IGNORE_WHITE_SPACES ""
+ENV CYGNUS_STH_ENABLE_ENCODING ""
+ENV CYGNUS_STH_ENABLE_NAME_MAPPINGS ""
+ENV CYGNUS_STH_SKIP_NAME_MAPPINGS_GENERATION ""
+ENV CYGNUS_STH_ENABLE_LOWERCASE ""
+ENV CYGNUS_STH_DATA_MODEL ""
+ENV CYGNUS_STH_DB_PREFIX ""
+ENV CYGNUS_STH_COLLECTION_PREFIX ""
+ENV CYGNUS_STH_RESOLUTIONS ""
+ENV CYGNUS_STH_BATCH_SIZE ""
+ENV CYGNUS_STH_BATCH_TIMEOUT ""
+ENV CYGNUS_STH_BATCH_TTL ""
+ENV CYGNUS_STH_DATA_EXPIRATION ""
+
+
+
+IOT UL
+
+Environment variable	Configuration attribute
+IOTA_CB_HOST	            contextBroker.host
+IOTA_CB_PORT	            contextBroker.port
+IOTA_NORTH_HOST	            server.host
+IOTA_NORTH_PORT	            server.port
+IOTA_PROVIDER_URL	        providerUrl
+IOTA_REGISTRY_TYPE	        deviceRegistry.type
+IOTA_LOG_LEVEL	            logLevel
+IOTA_TIMESTAMP	            timestamp
+IOTA_IOTAM_HOST	            iotManager.host
+IOTA_IOTAM_PORT	            iotManager.port
+IOTA_IOTAM_PATH	            iotManager.path
+IOTA_IOTAM_AGENTPATH	    iotManager.agentPath
+IOTA_IOTAM_PROTOCOL	        iotManager.protocol
+IOTA_IOTAM_DESCRIPTION	    iotManager.description
+IOTA_MONGO_HOST	            mongodb.host
+IOTA_MONGO_PORT	            mongodb.port
+IOTA_MONGO_DB	            mongodb.db
+IOTA_MONGO_REPLICASET	    mongodb.replicaSet
+IOTA_MONGO_RETRIES	        mongodb.retries
+IOTA_MONGO_RETRY_TIME	    mongodb.retryTime
+IOTA_SINGLE_MODE	        singleConfigurationMode
+IOTA_APPEND_MODE	        appendMode
+IOTA_POLLING_EXPIRATION	    pollingExpiration
+IOTA_POLLING_DAEMON_FREQ	pollingDaemonFrequency
+
+
+CYGNUS
+
+
+MySQL:
+
+It only works for building historical context data in MySQL.
+The endpoint for MYSQL is iot-mysql but can be changed through the CYGNUS_MYSQL_HOST environment variable.
+The port for MYSQL is 3306 but can be changed through the CYGNUS_MYSQL_PORT environment variable.
+The user for MySQL is mysql but can be changed through the CYGNUS_MYSQL_USER environment variable.
+The pass for MySQL is mysql but can be changed through the CYGNUS_MYSQL_PASS environment variable.
+CYGNUS_MYSQL_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_MYSQL_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_MYSQL_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_MYSQL_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_MYSQL_SKIP_NAME_MAPPINGS_GENERATION: true if name mappings should not be generated empty at start, false otherwise. Default is false.
+CYGNUS_MYSQL_ENABLE_LOWERCASE: true if lower case is wanted to forced in all the element names, false otherwise.
+CYGNUS_MYSQL_DATA_MODEL: select the data_model: dm-by-service-path, dm-by-entity or dm-by-entity-type.
+CYGNUS_MYSQL_ATTR_PERSISTENCE: how the attributes are stored, either per row either per column (row, column).
+CYGNUS_MYSQL_ATTR_NATIVE_TYPES: how the attribute are stored, using native type (true) or stringfy (false, by default).
+CYGNUS_MYSQL_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_MYSQL_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_MYSQL_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_MYSQL_OPTIONS: the jdbc optional parameters string which concatinates to jdbc url.
+Mongo and STH:
+
+Mongo only works for building historical context data in Mongo.
+STH only works for building historical context data in STH.
+The endpoint for Mongo and STH, containing host and port, is iot-mongo:27017 but can be changed through the CYGNUS_MONGO_HOSTS environment variable.
+The user for Mongo and STH is mongo but can be changed through the CYGNUS_MONGO_USER environment variable.
+The pass for Mongo and STH is mongo but can be changed through the CYGNUS_MONGO_PASS environment variable.
+CYGNUS_MONGO_AUTH_SOURCE: Mongo option to specify which common user database source to use for authentication. Usually could be admin.
+CYGNUS_MONGO_REPLICA_SET: Replica Set name. Note that this parameter is optional because Cygnus is able to connect to a MongoDB replica set without needing to specify its name.
+CYGNUS_MONGO_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_MONGO_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_MONGO_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_MONGO_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_MONGO_SKIP_NAME_MAPPINGS_GENERATION: true if name mappings should not be generated empty at start, false otherwise. Default is false.
+CYGNUS_MONGO_ENABLE_LOWERCASE: true if lower case is wanted to forced in all the element names, false otherwise.
+CYGNUS_MONGO_DATA_MODEL: select the data_model: dm-by-service-path or dm-by-entity.
+CYGNUS_MONGO_ATTR_PERSISTENCE: how the attributes are stored, either per row either per column (row, column).
+CYGNUS_MONGO_DB_PREFIX: prefix for the MongoDB databases
+CYGNUS_MONGO_COLLECTION_PREFIX: prefix for the MongoDB collections
+CYGNUS_MONGO_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_MONGO_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_MONGO_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_MONGO_DATA_EXPIRATION: value specified in seconds. Set to 0 if not wanting this policy
+CYGNUS_MONGO_COLLECTIONS_SIZE: value specified in bytes. Set to 0 if not wanting this policy. Minimum value (different than 0) is 4096 bytes
+CYGNUS_MONGO_MAX_DOCUMENTS: value specifies the number of documents. Set to 0 if not wanting this policy
+CYGNUS_MONGO_IGNORE_WHITE_SPACES: true if exclusively white space-based attribute values must be ignored, false otherwise
+CYGNUS_STH_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_STH_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_STH_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_STH_SKIP_NAME_MAPPINGS_GENERATION: true if name mappings should not be generated empty at start, false otherwise. Default is false.
+CYGNUS_STH_ENABLE_LOWERCASE: true if lower case is wanted to forced in all the element names, false otherwise.
+CYGNUS_STH_DATA_MODEL: select the data_model: dm-by-service-path or dm-by-entity.
+CYGNUS_STH_DB_PREFIX: prefix for the MongoDB databases
+CYGNUS_STH_COLLECTION_PREFIX: prefix for the MongoDB collections
+CYGNUS_STH_RESOLUTIONS: accepted values are month, day, hour, minute and second separated by comma
+CYGNUS_STH_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_STH_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_STH_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_STH_DATA_EXPIRATION: value specified in seconds. Set to 0 if not wanting this policy
+CKAN:
+
+It only works for building historical context data in CKAN.
+The endpoint for CKAN is iot-ckan but can be changed through the CYGNUS_CKAN_HOST environment variable.
+The port for CKAN is 80 but can be changed through the CYGNUS_CKAN_PORT environment variable.
+The ssl for CKAN is false but can be changed through the CYGNUS_CKAN_SSL environment variable.
+The api_key for CKAN is blank but can be changed through the CYGNUS_CKAN_API_KEY environment variable.
+CYGNUS_CKAN_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_CKAN_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_CKAN_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_CKAN_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_CKAN_SKIP_NAME_MAPPINGS_GENERATION: true if name mappings should not be generated empty at start, false otherwise. Default is false.
+CYGNUS_CKAN_DATA_MODEL: select the data_model: dm-by-service-path or dm-by-entity.
+CYGNUS_CKAN_ATTR_PERSISTENCE: how the attributes are stored, either per row either per column (row, column).
+CYGNUS_CKAN_ORION_URL: Orion URL used to compose the resource URL with the convenience operation URL to query it
+CYGNUS_CKAN_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_CKAN_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_CKAN_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_CKAN_BACKEND_MAX_CONNS: maximum number of Http connections to CKAN backend
+CYGNUS_CKAN_BACKEND_MAX_CONSS_PER_ROUTE: maximum number of Http connections per route to CKAN backend
+HDFS:
+
+It only works for building historical context data in HDFS.
+The endpoint for HDFS is iot-hdfs but can be changed through the CYGNUS_HDFS_HOST environment variable.
+The port for HDFS is 50070 but can be changed through the CYGNUS_HDFS_PORT environment variable.
+The user for HDFS is hdfs but can be changed through the CYGNUS_HDFS_USER environment variable.
+The token for HDFS is empty but can be set through the CYGNUS_HDFS_TOKEN environment variable
+CYGNUS_HDFS_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_HDFS_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_HDFS_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_HDFS_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_HDFS_ENABLE_LOWERCASE: true if lower case is wanted to forced in all the element names, false otherwise.
+CYGNUS_HDFS_DATA_MODEL: select the data_model: dm-by-service-path or dm-by-entity.
+CYGNUS_HDFS_FILE_FORMAT: how the attributes are stored, available formats are json-row, json-column, csv-row and csv-column
+CYGNUS_HDFS_BACKEND_IMPL: rest if the interaction with HDFS will be WebHDFS/HttpFS-based, binary if based on the Hadoop API
+CYGNUS_HDFS_BACKEND_MAX_CONNS: maximum number of Http connections to HDFS backend
+CYGNUS_HDFS_BACKEND_MAX_CONNS_PER_ROUTE: maximum number of Http connections per route to HDFS backend
+CYGNUS_HDFS_PASSWORD: password for the above username; this is only required for Hive authentication
+CYGNUS_HDFS_SERVICE_AS_NAMESPACE: true if the notified fiware-service (or the default one, if no one is notified) is used as the HDFS namespace, false otherwis
+CYGNUS_HDFS_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_HDFS_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_HDFS_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_HDFS_BATCH_RETRY_INTERVALS
+CYGNUS_HDFS_HIVE: true enables Hive, false disabled it
+CYGNUS_HDFS_KRB5_AUTH: true enables Kerberos-basded authentication, false disables it
+PostgreSQL:
+
+It only works for building historical context data in PostgreSQL.
+The endpoint for PostgreSQL is iot-postgresql but can be changed through the CYGNUS_POSTGRESQL_HOST environment variable.
+The port for PostgreSQL is 5432 but can be changed through the CYGNUS_POSTGRESQL_PORT environment variable.
+The user for PostgreSQL is postgresql but can be changed through the CYGNUS_POSTGRESQL_USER environment variable.
+The pass for PostgreSQL is postgresql but can be changed through the CYGNUS_POSTGRESQL_PASS environment variable.
+The database for PostgreSQL is postgres but can be changed through the CYGNUS_POSTGRESQL_DATABASE environment variable.
+CYGNUS_POSTGRESQL_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_POSTGRESQL_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_POSTGRESQL_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_POSTGRESQL_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_POSTGRESQL_SKIP_NAME_MAPPINGS_GENERATION: true if name mappings should not be generated empty at start, false otherwise. Default is false.
+CYGNUS_POSTGRESQL_ENABLE_LOWERCASE: true if lower case is wanted to forced in all the element names, false otherwise.
+CYGNUS_POSTGRESQL_ATTR_PERSISTENCE: how the attributes are stored, either per row either per column (row, column).
+CYGNUS_POSTGRESQL_ATTR_NATIVE_TYPES: how the attribute are stored, using native type (true) or stringfy (false, by default).
+CYGNUS_POSTGRESQL_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_POSTGRESQL_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_POSTGRESQL_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_POSTGRESQL_DATA_MODEL: select the data_model: dm-by-service-path, dm-by-entity or dm-by-entity-type.
+CYGNUS_POSTGRESQL_OPTIONS: the jdbc optional parameters string which concatinates to jdbc url.
+Carto:
+
+It only works for building historical context data in Carto.
+The user for Carto is carto but can be changed through the CYGNUS_CARTO_USER environment variable.
+The key for Carto is carto but can be changes through the CYGNUS_CARTO_KEY environment variable.
+Orion:
+
+It only works for building historical context data in Orion.
+The endpoint for Orion is iot-orion-ext but can be changed through the CYGNUS_ORION_HOST environment variable.
+The port for Orion is 1026 but can be changed through the CYGNUS_ORION_PORT environment variable.
+The user for Orion is empty but can be changed through the CYGNUS_ORION_USER environment variable.
+The pass for Orion is empty but can be changed through the CYGNUS_ORION_PASS environment variable.
+CYGNUS_ORION_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_ORION_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_ORION_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_ORION_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_ORION_SKIP_NAME_MAPPINGS_GENERATION: true if name mappings should not be generated empty at start, false otherwise. Default is false.
+CYGNUS_ORION_ENABLE_LOWERCASE: true if lower case is wanted to forced in all the element names, false otherwise.
+CYGNUS_ORION_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_ORION_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_ORION_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_ORION_SSL: SSL flag for connection to use with Orion.
+CYGNUS_ORION_KEYSTONE_HOST: Keystone IDM host used by Orion sink to perform authentication.
+CYGNUS_ORION_KEYSTONE_PORT: Keystone IDM port used by Orion sink to perform authentication.
+CYGNUS_ORION_KEYSTONE_SSL: SSL flag for connection to use with Keystone IDM.
+CYGNUS_ORION_FIWARE: Fiware Service header to provide to Orion sink.
+CYGNUS_ORION_FIWARE_PATH=: Fiware ServicePath header to provide to Orion sink.
+Postgis:
+
+It only works for building historical context data in Postgis.
+The endpoint for Postgis is iot-postgresql but can be changed through the CYGNUS_POSTGIS_HOST environment variable.
+The port for Postgis is 5432 but can be changed through the CYGNUS_POSTGIS_PORT environment variable.
+The user for Postgis is postgresql but can be changed through the CYGNUS_POSTGIS_USER environment variable.
+The pass for Postgis is postgresql but can be changed through the CYGNUS_POSTGIS_PASS environment variable.
+CYGNUS_POSTGIS_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_POSTGIS_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_POSTGIS_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_POSTGIS_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_POSTGIS_SKIP_NAME_MAPPINGS_GENERATION: true if name mappings should not be generated empty at start, false otherwise. Default is false.
+CYGNUS_POSTGIS_ENABLE_LOWERCASE: true if lower case is wanted to forced in all the element names, false otherwise.
+CYGNUS_POSTGIS_ATTR_PERSISTENCE: how the attributes are stored, either per row either per column (row, column).
+CYGNUS_POSTGIS_ATTR_NATIVE_TYPES: how the attribute are stored, using native type (true) or stringfy (false, by default).
+CYGNUS_POSTGIS_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_POSTGIS_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_POSTGIS_BATCH_TTL: number of retries upon persistence error.
+CYGNUS_POSTGIS_DATA_MODEL: select the data_model: dm-by-service-path, dm-by-entity or dm-by-entity-type.
+CYGNUS_POSTGIS_OPTIONS: the jdbc optional parameters string which concatinates to jdbc url.
+Elasticsearch:
+
+It only works for building historical context data in Elasticsearch.
+CYGNUS_ELASTICSEARCH_HOST: the hostname of Elasticsearch server. Default is localhost, but this environment variable is mandatory so you have to set this environment variable explicitly.
+CYGNUS_ELASTICSEARCH_PORT: the port number of Elasticsearch server. Default is 9200, but this environment variable is mandatory so you have to set this environment variable explicitly.
+CYGNUS_ELASTICSEARCH_SSL: true if connect to Elasticsearch server using SSL. Default is false, but this environment variable is mandatory so you have to set this environment variable explicitly.
+CYGNUS_ELASTICSEARCH_SKIP_CONF_GENERATION: true skips the generation of the conf files, typically this files will be got from a volume, false autogenerate the conf files from the rest of environment variables.
+CYGNUS_ELASTICSEARCH_INDEX_PREFIX: the prefix of index name. Default is cygnus.
+CYGNUS_ELASTICSEARCH_MAPPING_TYPE: the mapping type name of Elasticsearch. Default is cygnus_type.
+CYGNUS_ELASTICSEARCH_IGNORE_WHITE_SPACES: true if exclusively white space-based attribute values must be ignored, false otherwise. Default is true.
+CYGNUS_ELASTICSEARCH_ATTR_PERSISTENCE: how the attributes are stored, either per row either per column (row, column). Default is row. (see the document of NGSIElasticsearchSink because there are some points to consider.)
+CYGNUS_ELASTICSEARCH_TIMEZONE: timezone to be used as a document's timestamp. Default is UTC.
+CYGNUS_ELASTICSEARCH_CAST_VALUE: true if cast the attrValue using attrType. (see the document of NGSIElasticsearchSink.)
+CYGNUS_ELASTICSEARCH_CACHE_FLASH_INTERVAL_SEC: 0 if notified data will be persisted to Elasticsearch immediately. positive integer if notified data are cached on container's memory and will be persisted to Elasticsearch periodically every CYGNUS_ELASTICSEARCH_CACHE_FLASH_INTERVAL_SEC. Default is 0. (see the document of NGSIElasticsearchSink because there are some points to consider.)
+CYGNUS_ELASTICSEARCH_BACKEND_MAX_CONNS: Maximum number of connections allowed for a Http-based Elasticsearch backend. Default is 500.
+CYGNUS_ELASTICSEARCH_BACKEND_MAX_CONSS_PER_ROUTE: Maximum number of connections per route allowed for a Http-based Elasticsearch backend. Default is 100.
+CYGNUS_ELASTICSEARCH_CHARSET: The charset name used to encode attribute values when sending them to Elasticsearch. You have to set a valid charset name which is defined in "java.nio.charset.Charset". Default is UTF-8.
+ArcGis:
+
+It only works for building historical context data in ArcGis.
+The url for ArcGis is ArcGis but can be changed through the CYGNUS_ARCGIS_URL environment variable.
+The user for ArcGis is ArcGis but can be changed through the CYGNUS_ARCGIS_USER environment variable.
+The pass for ArcGis is ArcGis but can be changed through the CYGNUS_ARCGIS_PASS environment variable.
+CYGNUS_ARCGIS_ENABLE_ENCODING: true applies the new encoding, false applies the old encoding.
+CYGNUS_ARCGIS_ENABLE_GROUPING: true if the grouping feature is enabled for this sink, false otherwise.
+CYGNUS_ARCGIS_ENABLE_NAME_MAPPINGS: true if name mappings are enabled for this sink, false otherwise.
+CYGNUS_ARCGIS_DATA_MODEL: select the data_model: dm-by-service-path, dm-by-entity or dm-by-entity-type.
+CYGNUS_ARCGIS_BATCH_SIZE: number of notifications to be included within a processing batch.
+CYGNUS_ARCGIS_BATCH_TIMEOUT: timeout for batch accumulation in seconds.
+CYGNUS_ARCGIS_BATCH_TTL: number of retries upon persistence error.
+Log4j configuration file:
+
+The logging level is INFO but can be changed through the CYGNUS_LOG_LEVEL environment variable.
+The logging appender is console but can be changed through the CYGNUS_LOG_APPENDER environment variable.
+Monitoring:
+
+CYGNUS_MONITORING_TYPE: monitoring type. Choose from http or ganglia. If it is not specified, it will be disabled.

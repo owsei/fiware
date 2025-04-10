@@ -40,7 +40,7 @@ services:
       CYGNUS_POSTGRESQL_SERVICE_PORT: 5055
       
       # PostgreSQL config
-      CYGNUS_POSTGRESQL_HOST: postgres-db
+      CYGNUS_POSTGRESQL_HOST: postgis
       CYGNUS_POSTGRESQL_PORT: 5432
       CYGNUS_POSTGRESQL_DATABASE: orion
       CYGNUS_POSTGRESQL_USER: postgres
@@ -95,19 +95,21 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASS: password
       POSTGRES_PASSWORD: 1111
-      ALLOW_IP_RANGE: 0.0.0.0/0
+      # ALLOW_IP_RANGE: 0.0.0.0/0
       # Add extensions you need to be enabled by default in the DB. Default are the five specified below
       POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology,postgis_raster,pgrouting
       RUN_AS_ROOT: true
     ports:
-      - "5433:5433"
+      - "5433:5432"
     restart: on-failure
     volumes:
       - postgis-data:/var/lib/postgresql
-      - dbbackups:/backups
+      # - dbbackups:/backups
+    networks:
+      - fiware
   
   mysql:
-    image: mysql
+    image: mysql:5.7.22
     hostname: mysql
     container_name: mysql
     restart: always

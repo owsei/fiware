@@ -5,7 +5,7 @@ curl -X GET "http://localhost:1026/v2/entities" \
   -H "Fiware-ServicePath: /iots"
 ###
 
-curl -X GET "http://localhost:1026/v2/entities/device:sensor001/attrs/?options=keyValues" \
+curl -X GET "http://localhost:1026/v2/entities/sensor001/attrs/?options=keyValues" \
   -H "Fiware-Service: pamplona" \
   -H "Fiware-ServicePath: /iots"
 ###
@@ -76,7 +76,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 -H "Fiware-Service: pamplona" 
 -H "Fiware-ServicePath: /iots"
 -d '{
-  "description": "Notify Cygnus of all context changes Postgres",
+  "description": "Notify Draco of all context changes Postgres",
   "subject": {
     "entities": [
       {
@@ -134,8 +134,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor001' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|13.3|h|65'
-
+    --data-raw 't|13.4|h|53'
 ###
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
@@ -146,3 +145,32 @@ curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
 
 
 {"subscriptionId":"67f3705bc33f3ddafe0bd8ea","data":[{"id":"device:sensor002","type":"device","TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z","metadata":{}},"h":{"type":"Text","value":70,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}},"t":{"type":"Text","value":27.2,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}}}]}
+{"subscriptionId":"67f3705bc33f3ddafe0bd8ea","data":[{"id":"device:sensor001","type":"device","TimeInstant":{"type":"DateTime","value":"2025-04-08T09:22:31.590Z","metadata":{}},"h":{"type":"Text","value":55,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-08T09:22:31.590Z"}}},"t":{"type":"Text","value":14.3,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-08T09:22:31.590Z"}}}}]}
+
+
+{"subscriptionId":"67f7b1b11b0a21a5b109c81c","data":[{"id":"device:sensor001","type":"device","TimeInstant":{"type":"DateTime","value":"2025-04-10T12:04:58.973Z","metadata":{}},"h":{"type":"Text","value":53,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-10T12:04:58.973Z"}}},"t":{"type":"Text","value":13.4,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-10T12:04:58.973Z"}}}}]}
+
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "data": {
+        "*": {
+          "id": "id",
+          "TimeInstant": {
+            "value": "timestamp"
+          },
+          "t": {
+            "value": "t"
+          },
+          "h": {
+            "value": "h"
+          }
+        }
+      }
+    }
+  }
+]
+
+
+INSERT INTO pamplona.sensores (id, fechaarrive, h, t) VALUES (?, ?, ?, ?);
