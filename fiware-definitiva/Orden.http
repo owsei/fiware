@@ -143,7 +143,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor001' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|16.4|h|53'
+    --data-raw 't|21.4|h|53'
 ###
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
