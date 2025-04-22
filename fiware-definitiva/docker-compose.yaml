@@ -15,6 +15,8 @@ services:
 
   mongo:
     image: mongo:4.4
+    container_name: mongo
+    hostname: mongo
     ports:
       - "27017:27017"
     command: --nojournal
@@ -22,11 +24,25 @@ services:
       - mongo_data:/data/db
     networks:
       - fiware
+  
+  sth-comet:
+    image: telefonicaiot/fiware-sth-comet
+    container_name: sth-comet
+    hostname: sth-comet
+    ports:
+      - "8666:8666"
+    depends_on:
+      - mongo
+    environment:
+      - STH_HOST=0.0.0.0
+      - DB_URI=mongo:27017
+    networks:
+      - fiware
 
   cygnus:
     image: fiware/cygnus-ngsi
     hostname: cygnus
-    container_name: fiware-cygnus
+    container_name: cygnus
     depends_on:
       - postgres-db
     ports:

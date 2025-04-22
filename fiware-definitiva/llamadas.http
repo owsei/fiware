@@ -6,7 +6,8 @@
 ###
 GET http://localhost:1026/version
 ###
-
+GET http://localhost:1027/version
+##
 ###SUBSCRIPCIONES EN ORION DE CYGNUS
 ###
 GET http://localhost:1026/v2/subscriptions/ HTTP/1.1

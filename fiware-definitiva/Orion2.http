@@ -1,10 +1,36 @@
-curl -X GET http://localhost:1026/version
+
+### ORION VERSION
+curl -X GET "http://localhost:1027/version"
+
 ###
-curl -X "http://localhost:1026/v2/subscriptions/"
+### SUBSCRIPCION A ORION2 PARA QUE VEA LOS CAMBIOS
+curl -X POST 'http://localhost:1026/v2/subscriptions/'
+-H 'Content-Type: application/json' 
+-d '{
+  "description": "Notify Orion2 of all context",
+  "subject": {
+    "entities": [
+      {
+        "idPattern": ".*"
+      }
+    ]
+  },
+  "notification": {
+    "http": {
+      "url": "http://localhost:1027/ContextNotify"
+    }
+  },
+  "throttling": 0
+}'
+###
+###SUBSCRIPCIONES A ORION 
+curl -X GET "http://localhost:1026/v2/subscriptions/"
+ -H "Fiware-Service: pamplona"\
+ -H "Fiware-ServicePath: /orion2"
 
 ### COSNULTAR GRUPOS DE DISPOSITIVOS YA CONFIGURADOS
 #### HAY QUE CAMBIAR SERVICE Y SERVICEPATH PARA LOS DISTINTOS DISPOSITIVOS
-curl -X GET "http://localhost:1026/v2/entities" \
+curl -X GET "http://localhost:1027/v2/entities" \
   -H "Fiware-Service: pamplona" \
   -H "Fiware-ServicePath: /iots"
 ###
@@ -24,14 +50,14 @@ curl -X GET 'http://localhost:1026/v2/entities' \
 ###CONFIGURAR DISPOSITIVOS JSON EN ORION IOTs
 ### aprovisionar grupo de dispositivos
 
-curl -X POST "http://localhost:4041/iot/services" \
+curl -X POST "http://localhost:4042/iot/services" \
   -H "Content-Type: application/json" \
   -H "fiware-service: pamplona" \
   -H "fiware-servicepath: /iots" \
   -d '{
     "services": [{
       "apikey": "iot-json-key",
-      "cbroker": "http://orion:1026",
+      "cbroker": "http://orion:1027",
       "entity_type": "device",
       "resource": "/iot/d"
     }]
@@ -154,6 +180,8 @@ curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
     -H 'Content-Type: text/plain' \
     --data-raw 't|27.2|h|70'
 ###
+
+
 
 {"subscriptionId":"67f3705bc33f3ddafe0bd8ea","data":[{"id":"device:sensor002","type":"device","TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z","metadata":{}},"h":{"type":"Text","value":70,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}},"t":{"type":"Text","value":27.2,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}}}]}
 {"subscriptionId":"67f3705bc33f3ddafe0bd8ea","data":[{"id":"device:sensor001","type":"device","TimeInstant":{"type":"DateTime","value":"2025-04-08T09:22:31.590Z","metadata":{}},"h":{"type":"Text","value":55,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-08T09:22:31.590Z"}}},"t":{"type":"Text","value":14.3,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-08T09:22:31.590Z"}}}}]}
