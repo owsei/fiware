@@ -173,12 +173,12 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor001' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|20.4|h|65'
+    --data-raw 't|35.4|h|65'
 ###
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|27.2|h|70'
+    --data-raw 't|32.2|h|70'
 ###
 
 
@@ -212,3 +212,69 @@ curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
 
 
 INSERT INTO pamplona.sensores (id, fechaarrive, h, t) VALUES (?, ?, ?, ?);
+
+
+
+#### PERSEO ####
+
+curl -X POST http://localhost:1026/v2/entities \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "Room1",
+    "type": "Room",
+    "temperature": {
+      "value": 21,
+      "type": "Number"
+    }
+  }'
+###
+curl -X POST http://localhost:1026/v2/entities \
+  -H "Content-Type: application/json" \
+  -d '{
+    "id": "Room2",
+    "type": "Room",
+    "temperature": {
+      "value": 23,
+      "type": "Number"
+    }
+  }'
+
+###
+
+curl -X POST http://localhost:9090/rules \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "temperature-alert-room1",
+    "text": "select * from pattern [every ev=iotEvent(cast(cast(temperature?, Double), Double) > 25)]",
+    "action": {
+      "type": "post",
+      "parameters": {
+        "url": "http://localhost:8080/perseo"
+      }
+    },
+    "pattern": {
+      "type": "Room",
+      "id": "Room1"
+    }
+  }'
+
+###
+curl -X PATCH http://localhost:1026/v2/entities/Room1/attrs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "temperature": {
+      "value": 31,
+      "type": "Number"
+    }
+  }'
+
+
+###
+curl -X PATCH http://localhost:1026/v2/entities/Room2/attrs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "temperature": {
+      "value": 30,
+      "type": "Number"
+    }
+  }'

@@ -56,7 +56,7 @@ services:
       CYGNUS_POSTGRESQL_SERVICE_PORT: 5055
       
       # PostgreSQL config
-      CYGNUS_POSTGRESQL_HOST: postgis
+      CYGNUS_POSTGRESQL_HOST: postgres-db
       CYGNUS_POSTGRESQL_PORT: 5432
       CYGNUS_POSTGRESQL_DATABASE: orion
       CYGNUS_POSTGRESQL_USER: postgres
@@ -89,7 +89,7 @@ services:
   postgres-db:
     image: postgres
     hostname: postgres-db
-    container_name: db-postgres
+    container_name: postgres-db
     ports:
       - "5432:5432"
     environment:
@@ -101,28 +101,28 @@ services:
     networks:
       - fiware
   
-  postgis:
-    image: postgis/postgis
-    hostname: postgis
-    container_name: postgis
-    environment:
-      # If you need to create multiple database you can add coma separated databases eg gis,data
-      POSTGRES_DB : orion
-      POSTGRES_USER: postgres
-      POSTGRES_PASS: password
-      POSTGRES_PASSWORD: 1111
-      # ALLOW_IP_RANGE: 0.0.0.0/0
-      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
-      POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology,postgis_raster,pgrouting
-      RUN_AS_ROOT: true
-    ports:
-      - "5433:5432"
-    restart: on-failure
-    volumes:
-      - postgis-data:/var/lib/postgresql
-      # - dbbackups:/backups
-    networks:
-      - fiware
+  # postgis:
+  #   image: postgis/postgis
+  #   hostname: postgis
+  #   container_name: postgis
+  #   environment:
+  #     # If you need to create multiple database you can add coma separated databases eg gis,data
+  #     POSTGRES_DB : orion
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASS: password
+  #     POSTGRES_PASSWORD: 1111
+  #     # ALLOW_IP_RANGE: 0.0.0.0/0
+  #     # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+  #     POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology,postgis_raster,pgrouting
+  #     RUN_AS_ROOT: true
+  #   ports:
+  #     - "5433:5432"
+  #   restart: on-failure
+  #   volumes:
+  #     - postgis-data:/var/lib/postgresql
+  #     # - dbbackups:/backups
+  #   networks:
+  #     - fiware
   
   mysql:
     image: mysql:5.7.22
@@ -144,25 +144,6 @@ services:
     networks:
       - fiware
 
-  # sth:
-  #   image: telefonicaiot/fiware-sth-comet
-  #   hostname: sth
-  #   container_name: sth
-  #   depends_on:
-  #     - mongo
-  #   ports:
-  #     - "8666:8666"
-  #   environment:
-  #     - STH_HOST=0.0.0.0
-  #     - STH_PORT=8666
-  #     - DB_PREFIX=sth_
-  #     - DB_URI=mongo:27017
-  #     - LOGOPS_LEVEL=DEBUG
-  #   command: 
-  #     npm start
-  #   networks:
-  #     - fiware
-  
   iot-agent-json:
     image: fiware/iotagent-json
     hostname: iot-agent-json
@@ -195,7 +176,7 @@ services:
   iot-agent-ul:
     image: fiware/iotagent-ul
     hostname: iot-agent-ul
-    container_name: fiware-iot-agent
+    container_name: iot-agent-ul
     depends_on:
       - mongo
     ports:
@@ -239,85 +220,82 @@ services:
     networks:
       - fiware
   
-  # mysql:
-  #   image: mysql:latest
-  #   container_name: mysql
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: 1111
-  #     MYSQL_DATABASE: orion
-  #     MYSQL_USER: admin
-  #     MYSQL_PASSWORD: 1111
-  #   ports:
-  #     - "3307:3306"
-  #   volumes:
-  #     - mysql_data:/var/lib/mysql
-  #   networks:
-  #     - fiware
-
-  
+ 
 
   # PERSEO
-  # perseo-mongo:
-  #   image: mongo:4.2
-  #   hostname: perseo-mongo
-  #   container_name: perseo-mongo
-  #   volumes:
-  #       - ./mongo_perseo:/data/db
-  #   deploy:
-  #     replicas: 1
-  #     restart_policy:
-  #       condition: on-failure
-  #   networks:
-  #     - fiware
-
-  # perseo-core:
-  #   image: fiware/perseo-core
-  #   hostname: perseo-core
-  #   container_name: perseo-core
-  #   environment:
-  #       - PERSEO_FE_URL=http://perseo-fe:9090
-  #       - MAX_AGE=6000
-  #   depends_on:
-  #       - perseo-mongo
-  #   deploy:
-  #       replicas: 1
-  #       restart_policy:
-  #           condition: on-failure
-  #   networks:
-  #       - perseo
+  perseo-core:
+    image: fiware/perseo-core
+    hostname: perseo-core
+    container_name: perseo-core
+    environment:
+        - PERSEO_FE_URL=http://perseo-fe:9090
+        - MAX_AGE=6000
+        # - PERSEO_MONGO_ENDPOINT= localhost:27018
+    depends_on:
+        - mongo
+    ports:
+        - 8080:8080
+    deploy:
+        replicas: 1
+        restart_policy:
+            condition: on-failure
+    networks:
+        - fiware
     
-  # perseo-fe:
-  #   image: fiware/perseo
-  #   hostname: perseo-fe
-  #   container_name: perseo-fe
-  #   ports:
-  #       - 9090:9090
-  #       - 8081:8080
-  #   depends_on:
-  #       - perseo-core
-  #   environment:
-  #       - PERSEO_MONGO_ENDPOINT=perseo-mongo
-  #       - PERSEO_CORE_URL=http://perseo-core:8080
-  #       - PERSEO_LOG_LEVEL=debug
-  #       - PERSEO_ORION_URL=http://orion:1026/
-  #       # - PERSEO_SMTP_HOST=www.hostname.com
-  #       # - PERSEO_SMTP_PORT=25
-  #       # - PERSEO_SMTP_SECURE=false
-  #   deploy:
-  #       replicas: 1
-  #       restart_policy:
-  #           condition: on-failure
-  #   networks:
-  #       perseo:
-  #       fiware:
+  perseo-fe:
+    image: fiware/perseo
+    hostname: perseo-fe
+    container_name: perseo-fe
+    ports:
+        - 9090:9090
+    depends_on:
+        - perseo-core
+    environment:
+        PERSEO_MONGO_ENDPOINT: perseo-mongo[:27018]
+        PERSEO_CORE_URL: http://perseo-core:8080
+        PERSEO_LOG_LEVEL: debug
+        PERSEO_ORION_URL: http://orion:1026/
+        # - PERSEO_SMTP_HOST=www.hostname.com
+        # - PERSEO_SMTP_PORT=25
+        # - PERSEO_SMTP_SECURE=false
+    deploy:
+        replicas: 1
+        restart_policy:
+            condition: on-failure
+    networks:
+        - fiware
+
+  perseo-mongo:
+    image: mongo:4.4
+    container_name: perseo-mongo
+    hostname: perseo-mongo
+    ports:
+      - "27018:27017"
+    command: --nojournal
+    volumes:
+      - perseo_mongo_data:/data/db
+    networks:
+      - fiware
   # FIN PERSEO
+
+  fastapi:
+    image: fastapi
+    container_name: fastapi
+    hostname: fastapi
+    ports:
+      - "8000:8000"
+    networks:
+    - fiware
 
 
 volumes:
+  #MONGO
   mongo_data: 
+  #POSTGRES
   postgres_data:
+  #MYSQL
   mysql_data:
+  #POSTGIS
   postgis-data:
   dbbackups:
   mongo_perseo:
@@ -329,8 +307,9 @@ volumes:
   nifi_content:
   nifi_provenance:
   nifi_logs:
+  #PERSEO
+  perseo_mongo_data:
 
 networks:
   fiware:
     driver: bridge
-  perseo:

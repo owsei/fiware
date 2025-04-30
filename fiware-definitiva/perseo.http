@@ -1,0 +1,198 @@
+
+###
+###CONFIGURAR DISPOSITIVOS JSON EN ORION IOTs
+curl -X POST "http://localhost:4041/iot/services" \
+  -H "Content-Type: application/json" \
+  -H "fiware-service: pamplona" \
+  -H "fiware-servicepath: /" \
+  -d '{
+    "services": [{
+      "apikey": "123456789",
+      "cbroker": "http://orion:1026",
+      "entity_type": "Room",
+      "resource": "/iot/json"
+    }]
+  }'
+###
+
+#AÑADIR ENTIDADES
+curl -X POST 'http://localhost:1026/v2/entities/' 
+-H 'Content-Type: application/json'
+-d '{
+        "id":"Room1",
+        "type":"Room",
+        "temperature":{
+            "type":"Number",
+            "value":25
+        }
+    }'
+
+###
+
+curl -X POST 'http://localhost:1026/v2/entities/' 
+-H 'Content-Type: application/json'
+-d '{
+        "id":"Room1",
+        "type":"Room",
+        "temperature":{
+            "type":"Number",
+            "value":33
+        }
+    }'
+
+###
+GET http://localhost:9090/version
+
+###
+curl  http://localhost:9090/rules
+
+###
+curl -X PUT "http://localhost:9090/admin/log?level=DEBUG"
+
+###
+
+curl http://localhost:8080/perseo-core/version
+
+#####
+
+curl -X POST http://localhost:1026/v2/subscriptions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Notify Perseo of temperature changes temeperature",
+    "subject": {
+      "entities": [
+        {
+          "id": ".*",
+          "type": "Room"
+        }
+      ],
+      "condition": {
+        "attrs": ["temperature"],
+        "expression": {
+          "q": "temperature>25"
+        }
+      }
+    },
+    "notification": {
+      "http": {
+        "url": "http://localhost:9090/notices"
+      },
+      "attrs": ["temperature"]
+    }
+  }'
+
+####
+
+
+curl -X POST "http://localhost:1026/v2/subscriptions"
+-H 'Content-Type: application/json' 
+-H 'Fiware-Service: pamplona' 
+-H 'Fiware-ServicePath: /iots' 
+-d '
+  {
+  "description": "Notificar Perseo de temperatura alta",
+  "subject": {
+    "entities": [{ "idPattern": ".*", "type": "device" }],
+    "condition": { "expression": { "q": "t>45" } }
+  },
+  "notification": {
+    "http": { "url": "http://localhost:9090/notices" },
+    "attrs": ["t"]
+  }
+}'
+
+
+
+###
+### REGLA DE PERSEO ###
+###  
+  curl -X POST http://localhost:9090/rules \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "temperature-alert-2",
+    "text": "select * from pattern [every ev=iotEvent(cast(cast(t?, Double), Double) > 21)]",
+    "action": {
+      "type": "post",
+      "parameters": {
+        "url": "http://localhost:8000/perseo"
+      }
+    },
+    "pattern": {
+      "id": ".*"
+    }
+  }'
+###
+
+  curl -X POST http://localhost:9090/rules \
+  -H "Content-Type: application/json"\
+  -d '{
+    "name": "temp-alert-IOTs",
+    "text": "select * from iotEvent where cast(t?,Double) > 22",
+    "action": {
+      "type": "post",
+      "parameters": {
+        "url": "http://localhost:8000/alerts"
+      }
+    },
+    "pattern": {
+      "id": ".*"
+    }
+  }'
+
+###
+  curl -X PATCH http://localhost:1026/v2/entities/Room1/attrs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "temperature": {
+      "value": 33,
+      "type": "Number"
+    }
+  }'
+
+
+
+
+###
+
+
+  curl -X POST "http://localhost:9090/rules" \
+  -H 'Content-Type: application/json' 
+  -d '{
+    "name": "type-Room-alerts-superior-25",
+    "text": "select * from pattern [every ev=iotEvent(cast(cast(temperature?, Double), Double) > 25)]",
+    "pattern": {
+      "type": "Room",
+      "id": ".*"
+    },
+    "action": {
+      "type": "post",
+      "parameters": {
+        "url": "http://localhost:8000/alerts",
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "json": {
+          "id": "Room",
+          "temperature": 25,
+          "ruleName": "type-Room-alerts-superior-25"
+        }
+      }
+    }
+  }'
+
+
+
+###
+curl -X PATCH http://localhost:1026/v2/entities/Room1/attrs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "temperature": {
+      "value": 35,
+      "type": "Number"
+    }
+  }'
+
+
+###
+curl -X GET "http://localhost:1026/v2/entities/Room1?options=values&attrs=temperature"

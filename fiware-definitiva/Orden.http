@@ -80,7 +80,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 -H "Fiware-Service: pamplona" 
 -H "Fiware-ServicePath: /iots"
 -d '{
-  "description": "Notify Cygnus/Draco of all context changes Postgres",
+  "description": "Notify Cygnus of all context changes Postgres",
   "subject": {
     "entities": [
       {
@@ -90,7 +90,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
   },
   "notification": {
     "http": {
-      "url": "http://draco:5050/notify"
+      "url": "http://cygnus:5055/notify"
     }
   },
   "throttling": 0
@@ -102,7 +102,7 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 -H "Fiware-Service: pamplona" 
 -H "Fiware-ServicePath: /iots"
 -d '{
-  "description": "Notify Cygnus of all context changes TO MySQL",
+  "description": "Notify Draco of all context changes ",
   "subject": {
     "entities": [
       {
@@ -147,12 +147,53 @@ curl -X POST 'http://localhost:1026/v2/subscriptions/'
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor001' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|20.4|h|65'
+    --data-raw 't|33.75|h|66'
 ###
 
 curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
     -H 'Content-Type: text/plain' \
-    --data-raw 't|27.2|h|70'
+    --data-raw 't|32.2|h|70'
+###
+
+
+
+curl http://localhost:9090/version
+###
+
+curl  http://localhost:9090/rules
+###
+
+curl -X POST http://localhost:9090/notices
+
+#SUBCRIPCION DE PERSEO A ORION
+###
+curl -X POST "http://localhost:1026/v2/subscriptions"
+-H 'Content-Type: application/json' 
+-H 'Fiware-Service: pamplona' 
+-H 'Fiware-ServicePath: /' 
+-d '
+  {
+    "description": "Subscription to feed the CEP room",
+    "subject": {
+      "entities": [
+        {
+          "idPattern": ".*"        
+        }
+      ],
+      "condition": {
+        "expression": { "q": "temperature>25" }
+      }
+    },
+    "notification": {
+      "http": {
+        "url": "http://localhost:9090/notices"
+      },
+      "attrs": [
+        "temperature"
+      ]
+    }
+  }'
+
 ###
 
 {"subscriptionId":"67f3705bc33f3ddafe0bd8ea","data":[{"id":"device:sensor002","type":"device","TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z","metadata":{}},"h":{"type":"Text","value":70,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}},"t":{"type":"Text","value":27.2,"metadata":{"TimeInstant":{"type":"DateTime","value":"2025-04-07T07:52:40.644Z"}}}}]}
@@ -183,4 +224,66 @@ curl -L -X POST 'http://localhost:7897/iot/d?k=iot-json-key&i=sensor002' \
 ]
 
 
+
+{
+	"operation": "shift",
+	"data": {
+			"*":{
+              "id":"id",
+              "TimeInstant":{
+              	"value":"fechaarrive"
+              },
+              "h":{
+              	"value":"h"
+              },
+              "t":{
+              	"value":"t"
+              }
+              
+            }
+		}
+}
+
+
 INSERT INTO pamplona.sensores (id, fechaarrive, h, t) VALUES (?, ?, ?, ?);
+
+{
+	"operation": "shift",
+	"data": {
+			"*":{
+              "id":"id",
+              "TimeInstant":{
+              	"value":"fecha"
+              },
+              "h":{
+              	"value":"h"
+              },
+              "t":{
+              	"value":"t"
+              }
+              
+            }
+		}
+}
+
+
+[
+  {
+    "operation": "default",
+    "spec": {
+      "table": "pamplona.sensores"
+    }
+  },
+  {
+    "operation": "modify-overwrite-beta",
+    "spec": {
+      "sql": "=concat('INSERT INTO ',@(1,table),' (id, fecha, h, t) VALUES (\\'',@(1,id),'\\', \\'',@(1,fecha),'\\', ', ',@(1,h),', ',@(1,t),');')"
+    }
+  },
+  {
+    "operation": "shift",
+    "spec": {
+      "sql": ""
+    }
+  }
+]
