@@ -5,8 +5,8 @@ services:
     image: fiware/orion
     container_name: orion
     hostname: orion
-    ports:
-      - "1026:1026"
+    # ports:
+    #   - "1026:1026"
     depends_on:
       - mongo
     command: 
@@ -14,13 +14,14 @@ services:
       -corsOrigin __ALL
     labels:
       - "traefik.enable=true"
-      # Ruta: http://localhost/orion/
-      - "traefik.http.routers.orion.rule=PathPrefix(`/orion`)"
+      - "traefik.http.routers.orion.rule=PathPrefix(`/orion`) && PathPrefix(`/v2`)"
       - "traefik.http.routers.orion.entrypoints=web"
       - "traefik.http.routers.orion.middlewares=keycloak-auth,orion-strip"
       - "traefik.http.services.orion.loadbalancer.server.port=1026"
-      # Elimina el prefijo /orion antes de enviar al servicio
       - "traefik.http.middlewares.orion-strip.stripprefix.prefixes=/orion"
+      - "traefik.http.middlewares.keycloak-auth.forwardauth.address=http://jwt-validator:4180"
+      - "traefik.http.middlewares.keycloak-auth.forwardauth.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email"
+
     networks:
       - fiware
 
@@ -232,8 +233,7 @@ services:
       --client-id=fiware-client
       --client-secret=zSLClriNmcTC7OUd7WUxphb0tufJH2Pg
       --oidc-issuer-url=http://keycloak:8080/realms/fiware
-      
-      --upstream=http://orion:1026
+      --upstream=static://200
       --http-address=0.0.0.0:4180
       --skip-provider-button=true
       --email-domain="*"
@@ -254,14 +254,12 @@ services:
     image: traefik:v3.7.0
     container_name: traefik
     hostname: traefik
+    restart: unless-stopped
     command:
-      - --api.dashboard=true
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --providers.docker.network=fiware-net
-      - --entrypoints.web.address=:80
-      - --log.level=INFO
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:81"
     ports:
       - "81:80"      # Punto de entrada de todas las apps
       - "8090:8080"  # Dashboard de Traefik
