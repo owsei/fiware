@@ -13,13 +13,13 @@ services:
       -corsOrigin __ALL
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.orion.rule=PathPrefix(`/orion`) && PathPrefix(`/v2`)"
+      - "traefik.http.routers.orion.rule=PathPrefix(`/orion`)"
       - "traefik.http.routers.orion.entrypoints=web"
       - "traefik.http.routers.orion.middlewares=keycloak-auth,orion-strip"
       - "traefik.http.services.orion.loadbalancer.server.port=1026"
       - "traefik.http.middlewares.orion-strip.stripprefix.prefixes=/orion"
-      - "traefik.http.middlewares.keycloak-auth.forwardauth.address=http://jwt-validator:4180"
-      - "traefik.http.middlewares.keycloak-auth.forwardauth.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email"
+      # - "traefik.http.middlewares.keycloak-auth.forwardauth.address=http://jwt-validator:4180"
+      # - "traefik.http.middlewares.keycloak-auth.forwardauth.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email"
 
     networks:
       - fiware-net
@@ -37,7 +37,7 @@ services:
       # Ruta: http://localhost/mongo/
       - "traefik.http.routers.mongo.rule=PathPrefix(`/mongo`)"
       - "traefik.http.routers.mongo.entrypoints=web"
-      - "traefik.http.routers.mongo.middlewares=keycloak-auth,mongo-strip"
+      - "traefik.http.routers.mongo.middlewares=mongo-strip"
       - "traefik.http.services.mongo.loadbalancer.server.port=27017"
       # Elimina el prefijo /mongo antes de enviar al servicio
       - "traefik.http.middlewares.mongo-strip.stripprefix.prefixes=/mongo"
@@ -140,38 +140,39 @@ services:
     build:
       context: .
       dockerfile: dockerfile_fastapi
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     labels:
       - "traefik.enable=true"
       # Ruta: http://localhost/api/
       - "traefik.http.routers.fastapi.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.fastapi.entrypoints=web"
-      - "traefik.http.routers.fastapi.middlewares=keycloak-auth,fastapi-strip"
+      - "traefik.http.routers.fastapi.middlewares=fastapi-strip"
       - "traefik.http.services.fastapi.loadbalancer.server.port=8000"
       - "traefik.http.middlewares.fastapi-strip.stripprefix.prefixes=/api"
     networks:
       - fiware-net
 
   # ── Nginx Web (tu app web) ─────────────────────
-  # nginx_server:
-  #   hostname: nginx
-  #   container_name: nginx
-  #   build:
-  #     context: .
-  #     dockerfile: dockerfile_nginx
-  #   # ports:
-  #   #   - "89:80"
-  #   labels:
-  #     - "traefik.enable=true"
-  #     # Ruta: http://localhost/web/
-  #     - "traefik.http.routers.nginx-web.rule=PathPrefix(`/web`)"
-  #     - "traefik.http.routers.nginx-web.entrypoints=web"
-  #     - "traefik.http.routers.nginx-web.middlewares=keycloak-auth,nginx-strip"
-  #     - "traefik.http.services.nginx-web.loadbalancer.server.port=80"
-  #     - "traefik.http.middlewares.nginx-strip.stripprefix.prefixes=/web"
-  #   networks:
-  #     - fiware-net
+  nginx_server:
+    hostname: nginx
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: dockerfile_nginx
+    ports:
+      - "89:80"
+    labels:
+      - "traefik.enable=true"
+      # Ruta: http://localhost/web/
+      - "traefik.http.routers.nginx-web.rule= PathPrefix(`/web`)"
+      - "traefik.http.routers.nginx-web.entrypoints=web"
+      - "traefik.http.routers.nginx-web.middlewares=nginx-strip"
+      - "traefik.http.services.nginx-web.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.nginx-strip.stripprefix.prefixes=/web"
+
+    networks:
+      - fiware-net
 
   # ── TimescaleDB ───────────────────────────────
   timescale:
@@ -213,7 +214,7 @@ services:
       KC_DB_URL_DATABASE: pamplona
       KC_DB_SCHEMA: keycloak
       KC_DB_USERNAME: admin
-      KC_DB_PASSWORD: admin
+      KC_DB_PASSWORD: admin1701
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     depends_on:
@@ -238,7 +239,7 @@ services:
       - --entrypoints.web.address=:80
       - --log.level=INFO
     ports:
-      - "81:80"      # Punto de entrada de todas las apps
+      - "80:80"      # Punto de entrada de todas las apps
       - "8090:8080"  # Dashboard de Traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -292,41 +293,41 @@ services:
       - fiware-net
 
   
-  #────── Apisix Proxy ───────────────────────────────
-  apisix:
-    image: apache/apisix:3.16.0-ubuntu
-    hostname: apisix
-    container_name: apisix
-    restart: always
-    volumes:
-      - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
-    depends_on:
-      - etcd
-    ports:
-      - "9180:9180/tcp"
-      - "9080:9080/tcp"
-      - "9091:9091/tcp"
-      - "9443:9443/tcp"
-      - "9092:9092/tcp"
-    networks:
-      - fiware-net
+  # #────── Apisix Proxy ───────────────────────────────
+  # apisix:
+  #   image: apache/apisix:3.16.0-ubuntu
+  #   hostname: apisix
+  #   container_name: apisix
+  #   restart: always
+  #   volumes:
+  #     - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+  #   depends_on:
+  #     - etcd
+  #   ports:
+  #     - "9180:9180/tcp"
+  #     - "9080:9080/tcp"
+  #     - "9091:9091/tcp"
+  #     - "9443:9443/tcp"
+  #     - "9092:9092/tcp"
+  #   networks:
+  #     - fiware-net
   
-  etcd:
-    image: bitnamilegacy/etcd:3.5.11
-    hostname: etcd
-    container_name: etcd
-    restart: always
-    volumes:
-      - ./etcd_data:/bitnami/etcd
-    environment:
-      ETCD_ENABLE_V2: "true"
-      ALLOW_NONE_AUTHENTICATION: "yes"
-      ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
-      ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
-    ports:
-      - "2379:2379/tcp"
-    networks:
-      - fiware-net
+  # etcd:
+  #   image: bitnamilegacy/etcd:3.5.11
+  #   hostname: etcd
+  #   container_name: etcd
+  #   restart: always
+  #   volumes:
+  #     - ./etcd_data:/bitnami/etcd
+  #   environment:
+  #     ETCD_ENABLE_V2: "true"
+  #     ALLOW_NONE_AUTHENTICATION: "yes"
+  #     ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
+  #     ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
+  #   ports:
+  #     - "2379:2379/tcp"
+  #   networks:
+  #     - fiware-net
 
 volumes:
   mongo_data:

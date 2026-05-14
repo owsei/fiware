@@ -1,0 +1,22 @@
+h1 {
+    font-display: 'Montserrat', sans-serif;
+}
+
+html{
+    background-color: #f0f0f0d5;
+}
+
+body {
+    background-color: white;
+    margin: 3px;
+    /* border: 1px solid black; */
+    border-radius: 5px;
+    padding: 5px;
+    color: black;
+    font-family: "Montserrat", sans-serif;
+}
+
+.title{
+    font-family: "Montserrat";
+    font-size: 36px;
+}
