@@ -291,20 +291,7 @@ services:
     networks:
       - fiware-net
 
-   # ── Traefik (reverse proxy) ───────────────────
-  traefik:
-    image: traefik:v3.7.0
-    container_name: traefik
-    hostname: traefik
-    restart: unless-stopped
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:81"
-    ports:
-      - "81:80"      # Punto de entrada de todas las apps
-      - "8090:8080"  # Dashboard de Traefik
+  
   #────── Apisix Proxy ───────────────────────────────
   apisix:
     image: apache/apisix:3.16.0-ubuntu
