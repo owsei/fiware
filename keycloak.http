@@ -1,30 +1,28 @@
 
-@token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEOWtBRG96VEZGcXFWbmxWclVtNnlPaUVqRTNsUnFEQjdTUE1Qb3NPejdzIn0.eyJleHAiOjE3Nzg1Njc0MjgsImlhdCI6MTc3ODU2NzEyOCwianRpIjoidHJydGNjOmExYzgwZjI3LTZiMWEtYTJhYy05NGMxLTNjOTQwZTUzNjdjOSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4NS9yZWFsbXMvZml3YXJlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjE3YzI0NDkwLTBmOWYtNGNhMC1iOTZjLThiNDM1ZWQ0M2RmMyIsInR5cCI6IkJlYXJlciIsImF6cCI6ImZpd2FyZS1jbGllbnQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1maXdhcmUiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiZml3YXJlLWNsaWVudCI6eyJyb2xlcyI6WyJ1bWFfcHJvdGVjdGlvbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJjbGllbnRIb3N0IjoiMTcyLjIxLjAuMSIsInByZWZlcnJlZF91c2VybmFtZSI6InNlcnZpY2UtYWNjb3VudC1maXdhcmUtY2xpZW50IiwiY2xpZW50QWRkcmVzcyI6IjE3Mi4yMS4wLjEiLCJjbGllbnRfaWQiOiJmaXdhcmUtY2xpZW50In0.U7ylrFI2v7weZfnpB5DbQctJwhOEJzFcYpj1aZJSUql5AA3YCxJ80TgFxoU_heHqdkbqTX4u5HhygzPaUBQvA6x-mM3YSurcVLAxTaNezCiw3OeRPVqVYS0WsXxU8ospD8kDsuWKv6dKWp0OIemUyQEyujSWBayv9ROHIQwXfNIqDZJG7IKS1-W_bXU4CK507XwKoNNiBp1EUKOQjkHxBvReRaShlKJDssRHZqAFZOap1Zo615oASYJjPyw_trlkmeNcHy8-EM4I8qbH7u78cafhSqr_OT0efIyj_o76ptU4rIcqvyQs0_lh6zoyDCcio0k8K6DD_sUhEC9-7aWMhQ
+@token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEOWtBRG96VEZGcXFWbmxWclVtNnlPaUVqRTNsUnFEQjdTUE1Qb3NPejdzIn0.eyJleHAiOjE3Nzg1MzQ2ODMsImlhdCI6MTc3ODUzNDM4MywianRpIjoib25ydHJvOjczNWI2YzQxLWZjZDMtOTcxNi0yMDZjLWVjODEyMzMxYzk4YSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4NS9yZWFsbXMvZml3YXJlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImE2NjkyMTgwLWY3NjEtNDI2Ni1iZmMyLTRhMGM1NzBiZGIyOCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImZpd2FyZS1jbGllbnQtdXNlcnMiLCJzaWQiOiJSRFJDeGpROUhHQ3JycHZPNnZJMVZXQjAiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZml3YXJlIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiUGFibG8gRXNwYXJ6YSIsInByZWZlcnJlZF91c2VybmFtZSI6InBhYmxvIiwiZ2l2ZW5fbmFtZSI6IlBhYmxvIiwiZmFtaWx5X25hbWUiOiJFc3BhcnphIiwiZW1haWwiOiJwamVzcGFyemFAZ21haWwuY29tIn0.OXN8yvMgtvJ0TR2zNZ0f6-iiZbgaXy7nuwau-BAjcGOJdWPViEgdAvkCCX6-oRvkUW82GI7WC9YegIXUvyCBavSL-TpV1c7nYP62za2P5T9cNhQTK0-WXxwAiT3r_zmPGVMa5T_b30jzmAdoxJEIrtmTjUjRQvZAhivZLBpYu8xOrVIRL5pBf4WiY0jj0Y8BVwEbzIuuLxQGNu9-STpQcZ6NvqzH5jLT3ZkjHTc8l1Dgc9H5QG9lBnzC6r1TPAixQuR8Jngdhf4a8C0jlGKSvx60gmecAVlqoXuNXTxls9W3N7fYwZFDY5efkyT2y-uUD1rs7hMgoiRBXKE8ltvE9w
 
 ###
 curl -s -X POST \
-  http://localhost:8085/realms/fiware/protocol/openid-connect/token \
+  http://localhost:8080/realms/fiware/protocol/openid-connect/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials" \
   -d "client_id=fiware-client" \
-  -d "client_secret=zSLClriNmcTC7OUd7WUxphb0tufJH2Pg" 
+  -d "client_secret=mRDyxY3deeW9WChqjiKsGvhtHj9iHHe1" \
 
 
 ###
 ### http://localhost:8085/realms/fiware/account
 ### hay que poner tambien el nombre y el apellido del usuario, sino no se le asignan los roles y no funciona la autenticación
 curl -s -X POST \
-  http://localhost:8085/realms/fiware/protocol/openid-connect/token \
+  http://localhost:8080/realms/fiware/protocol/openid-connect/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=password" \
   -d "client_id=fiware-client-users" \
-  -d "username=pablo" \
-  -d "password=1234" 
+  -d "username=pedro" \
+  -d "password=1111" 
   
-
-
 ####
-curl http://localhost:1027/version \
+curl http://localhost:81/orion/version \
     -H 'Authorization: Bearer {{token}}' 
  
 
@@ -37,7 +35,3 @@ GET http://orion:1026/v2/entities
 ###
 #VERSION IOT AGENT 
 curl -X GET "http://localhost:4041/iot/about" 
-
-
-###
-curl http://localhost/orion/v2/entities
