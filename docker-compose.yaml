@@ -25,13 +25,13 @@ services:
       - fiware-net
 
   mongo:
-    image: mongo:latest
+    image: mongo:5
     container_name: mongo
     hostname: mongo
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     volumes:
-      - mongo_data:/data/db
+      - ./mongo_data:/data/db
     labels:
       - "traefik.enable=true"
       # Ruta: http://localhost/mongo/
@@ -183,11 +183,11 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: pamplona
       PGDATA: /home/postgres/pgdata
-    
+      
     volumes:
       - ./postgis:/home/postgres/pgdata
-      - ./timescale-init/init-db-keycloak.sql:/docker-entrypoint-initdb.d/init-db-keycloak.sql:ro
-    user: "0:0"
+      # - ./timescale-init/init-db-keycloak.sql:/docker-entrypoint-initdb.d/init-db-keycloak.sql:ro
+    # user: "0:0"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 5s
@@ -258,7 +258,7 @@ services:
     command: >
       --provider=keycloak-oidc
       --client-id=fiware-client
-      --client-secret=mRDyxY3deeW9WChqjiKsGvhtHj9iHHe1
+      --client-secret=Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R
       --oidc-issuer-url=http://keycloak:8080/realms/fiware
       --upstream=static://200
       --http-address=0.0.0.0:4180
@@ -295,6 +295,8 @@ services:
   #────── Apisix Proxy ───────────────────────────────
   apisix:
     image: apache/apisix:3.16.0-ubuntu
+    hostname: apisix
+    container_name: apisix
     restart: always
     volumes:
       - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
@@ -311,6 +313,8 @@ services:
   
   etcd:
     image: bitnamilegacy/etcd:3.5.11
+    hostname: etcd
+    container_name: etcd
     restart: always
     volumes:
       - ./etcd_data:/bitnami/etcd
