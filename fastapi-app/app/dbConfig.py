@@ -1,8 +1,8 @@
 DB_POSTGIS_CONFIG = {
     'host': 'timescale',
-    'dbname': 'geopamplona',
+    'dbname': 'pamplona',
     'user': 'admin',
-    'password': 'admin',
+    'password': 'admin1701',
     'port': 5432
 }
 

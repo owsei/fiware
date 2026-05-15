@@ -23,6 +23,11 @@ apisix:
   control:
     ip: "0.0.0.0"
     port: 9092
+  
+  proxy_mode: http&stream
+  stream_proxy:
+    tcp:
+      - 9100     # your L4 listening port
 
 deployment:
   admin:
@@ -31,7 +36,7 @@ deployment:
 
     admin_key:
       - name: "admin"
-        key: edd1c9f034335f136f87ad84b625c8f1
+        key: nEIJ33AI1szXO7MIzLGTjQ5CIa4ZlYp3
         role: admin                 # admin: manage all configuration data
 
       - name: "viewer"

@@ -59,4 +59,3 @@ curl -X GET "http://localhost/iot-json-admin/iot/about"
 ###
 curl http://localhost/orion/v2/entities
 
-

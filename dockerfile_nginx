@@ -1,5 +1,6 @@
 FROM nginx:latest
 WORKDIR /usr/share/nginx/html
+COPY /fiware-app-angular/dist/fiware-web/browser /usr/share/nginx/html/web/
 COPY /fiware-app-angular/dist/fiware-web/browser /usr/share/nginx/html/
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
