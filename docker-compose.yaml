@@ -25,7 +25,7 @@ services:
       - fiware-net
 
   mongo:
-    image: mongo:5
+    image: public.ecr.aws/bitnami/mongodb:5.0
     container_name: mongo
     hostname: mongo
     # ports:
@@ -140,8 +140,8 @@ services:
     build:
       context: .
       dockerfile: dockerfile_fastapi
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     labels:
       - "traefik.enable=true"
       # Ruta: http://localhost/apit/
@@ -154,14 +154,14 @@ services:
       - fiware-net
 
   # ── Nginx Web (tu app web) ─────────────────────
-  nginx_server:
+  nginx:
     hostname: nginx
     container_name: nginx
     build:
       context: .
       dockerfile: dockerfile_nginx
-    # ports:
-    #   - "89:80"
+    ports:
+      - "89:80"
     labels:
       - "traefik.enable=true"
       # Ruta: http://localhost/web/
@@ -197,7 +197,6 @@ services:
     networks:
       - fiware-net
 
-
   # -- ------------- Seguridad y SSO ─────────────────────────────
   # ── Identity Manager ──────────────────────────
   keycloak:
@@ -227,7 +226,7 @@ services:
 
   # ── Traefik (reverse proxy) ───────────────────
   traefik:
-    image: traefik:v3.7.0
+    image: traefik:v3.7.1
     container_name: traefik
     hostname: traefik
     command:
@@ -294,8 +293,12 @@ services:
     networks:
       - fiware-net
 
-  
   # #────── Apisix Proxy ───────────────────────────────
+  ### Apisix es un API Gateway que puede actuar como reverse proxy, balanceador de carga, y más.
+  ### En este ejemplo lo usamos para enrutar tráfico a servicios internos, pero también podría usarse para 
+  ### exponer APIs externas con autenticación, rate limiting, etc.
+  ### esta herramienta sustituye a Traefik como reverse proxy, pero en este ejemplo la mantenemos para mostrar 
+  ### cómo se podrían usar ambas en conjunto (Traefik para enrutar a servicios internos, y Apisix para gestionar APIs externas).
   apisix:
     image: apache/apisix:3.16.0-ubuntu
     hostname: apisix
