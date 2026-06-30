@@ -13,19 +13,19 @@ services:
       -corsOrigin __ALL
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.orion.rule=PathPrefix(`/orion`) && PathPrefix(`/v2`)"
+      - "traefik.http.routers.orion.rule=PathPrefix(`/orion`)"
       - "traefik.http.routers.orion.entrypoints=web"
       - "traefik.http.routers.orion.middlewares=keycloak-auth,orion-strip"
       - "traefik.http.services.orion.loadbalancer.server.port=1026"
       - "traefik.http.middlewares.orion-strip.stripprefix.prefixes=/orion"
-      - "traefik.http.middlewares.keycloak-auth.forwardauth.address=http://jwt-validator:4180"
-      - "traefik.http.middlewares.keycloak-auth.forwardauth.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email"
+      # - "traefik.http.middlewares.keycloak-auth.forwardauth.address=http://jwt-validator:4180"
+      # - "traefik.http.middlewares.keycloak-auth.forwardauth.authResponseHeaders=X-Auth-Request-User,X-Auth-Request-Email"
 
     networks:
       - fiware-net
 
   mongo:
-    image: mongo:latest
+    image: public.ecr.aws/bitnami/mongodb:5.0
     container_name: mongo
     hostname: mongo
     # ports:
@@ -144,12 +144,12 @@ services:
     #   - "8000:8000"
     labels:
       - "traefik.enable=true"
-      # Ruta: http://localhost/api/
-      - "traefik.http.routers.fastapi.rule=PathPrefix(`/api`)"
+      # Ruta: http://localhost/apit/
+      - "traefik.http.routers.fastapi.rule=PathPrefix(`/apit`)"
       - "traefik.http.routers.fastapi.entrypoints=web"
-      - "traefik.http.routers.fastapi.middlewares=keycloak-auth,fastapi-strip"
+      - "traefik.http.routers.fastapi.middlewares=fastapi-strip"
       - "traefik.http.services.fastapi.loadbalancer.server.port=8000"
-      - "traefik.http.middlewares.fastapi-strip.stripprefix.prefixes=/api"
+      - "traefik.http.middlewares.fastapi-strip.stripprefix.prefixes=/apit"
     networks:
       - fiware-net
 
@@ -173,6 +173,9 @@ services:
     networks:
       - fiware-net
 
+    networks:
+      - fiware-net
+
   # ── TimescaleDB ───────────────────────────────
   timescale:
     image: timescale/timescaledb-ha:pg16-ts2.17-all
@@ -186,16 +189,15 @@ services:
     
     volumes:
       - ./postgis:/home/postgres/pgdata
-      - ./timescale-init/init-db-keycloak.sql:/docker-entrypoint-initdb.d/init-db-keycloak.sql:ro
-    user: "0:0"
+      # - ./timescale-init/init-db-keycloak.sql:/docker-entrypoint-initdb.d/init-db-keycloak.sql:ro
+    # user: "0:0"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -U admin -d pamplona -h localhost -p 5432 || exit 1"]
       interval: 5s
-      timeout: 5s
+      timeout: 3s
       retries: 5
     networks:
       - fiware-net
-
 
   # -- ------------- Seguridad y SSO ─────────────────────────────
   # ── Identity Manager ──────────────────────────
@@ -213,7 +215,7 @@ services:
       KC_DB_URL_DATABASE: pamplona
       KC_DB_SCHEMA: keycloak
       KC_DB_USERNAME: admin
-      KC_DB_PASSWORD: admin
+      KC_DB_PASSWORD: admin1701
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     depends_on:
@@ -226,7 +228,7 @@ services:
 
   # ── Traefik (reverse proxy) ───────────────────
   traefik:
-    image: traefik:v3.7.0
+    image: traefik:v3.7.1
     container_name: traefik
     hostname: traefik
     command:
@@ -258,9 +260,11 @@ services:
     command: >
       --provider=keycloak-oidc
       --client-id=fiware-client
-      --client-secret=mRDyxY3deeW9WChqjiKsGvhtHj9iHHe1
+      --client-secret=Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R
       --oidc-issuer-url=http://keycloak:8080/realms/fiware
+      --redirect-url=http://localhost/oauth2/callback
       --upstream=static://200
+      
       --http-address=0.0.0.0:4180
       --skip-provider-button=true
       --email-domain="*"
@@ -291,8 +295,12 @@ services:
     networks:
       - fiware-net
 
-  
-  #────── Apisix Proxy ───────────────────────────────
+  # #────── Apisix Proxy ───────────────────────────────
+  ### Apisix es un API Gateway que puede actuar como reverse proxy, balanceador de carga, y más.
+  ### En este ejemplo lo usamos para enrutar tráfico a servicios internos, pero también podría usarse para 
+  ### exponer APIs externas con autenticación, rate limiting, etc.
+  ### esta herramienta sustituye a Traefik como reverse proxy, pero en este ejemplo la mantenemos para mostrar 
+  ### cómo se podrían usar ambas en conjunto (Traefik para enrutar a servicios internos, y Apisix para gestionar APIs externas).
   apisix:
     image: apache/apisix:3.16.0-ubuntu
     hostname: apisix
@@ -305,17 +313,18 @@ services:
       - etcd
     ports:
       - "9180:9180/tcp"
-      - "9080:9080/tcp"
+      - "80:9080/tcp"
       - "9091:9091/tcp"
       - "9443:9443/tcp"
       - "9092:9092/tcp"
+      - "9100:9100/tcp"
     networks:
       - fiware-net
   
   etcd:
     image: bitnamilegacy/etcd:3.5.11
-    container_name: etcd
     hostname: etcd
+    container_name: etcd
     restart: always
     volumes:
       - ./etcd_data:/bitnami/etcd
@@ -324,8 +333,8 @@ services:
       ALLOW_NONE_AUTHENTICATION: "yes"
       ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
       ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
-    ports:
-      - "2379:2379/tcp"
+    # ports:
+    #   - "2379:2379/tcp"
     networks:
       - fiware-net
 

@@ -1,16 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-@import "tailwindcss";
-
 
 h1 {
     font-display: 'Montserrat', sans-serif;
 }
 
-html,body {
+html{
+    background-color: #f0f0f0d5;
+}
+
+body {
+    background-color: white;
     margin: 3px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 5px;
     padding: 5px;
+    color: black;
+    font-family: "Montserrat", sans-serif;
 }
 
 .title{

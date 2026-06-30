@@ -1,5 +1,5 @@
 
-@token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzeUhjMDlOaXQ0NkpsMzFKMUtLeUhXVV83bEc5UDFYRE4ya20taDNTanFZIn0.eyJleHAiOjE3NzkwOTU1MjYsImlhdCI6MTc3OTA5NTIyNiwianRpIjoidHJydGNjOmJmMTY2ZDAyLTdiMTgtOTI5MS1lZjBjLTM1MGU4YThjNzE0YiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9yZWFsbXMvZml3YXJlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6Ijc3ODhkZTAyLTdkNDMtNGIwZi1hY2M0LTljZjE1MGQ5NGYxZiIsInR5cCI6IkJlYXJlciIsImF6cCI6ImZpd2FyZS1jbGllbnQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZml3YXJlIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImZpd2FyZS1jbGllbnQiOnsicm9sZXMiOlsidW1hX3Byb3RlY3Rpb24iXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImNsaWVudEhvc3QiOiIxNzIuMTguMC4xIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtZml3YXJlLWNsaWVudCIsImNsaWVudEFkZHJlc3MiOiIxNzIuMTguMC4xIiwiY2xpZW50X2lkIjoiZml3YXJlLWNsaWVudCJ9.5nrAbi42w2auYt5Rh_truyFyPge6alQx4e5dHkZWoU8Avhb-QtuDvu0EzPVkbr0nvUTeeEQ_6nSNcPGRHdFOHcOgxBr3cQaCSfJ7NtuG-Cqh9OAH7Z6Kvo-I04H9VsBrWYYKvm6R75aNUtIxaFrlABa4yQfUJdvdYbWhlltuQF9-Y52TKR1X-DpIVyo1CO6TQioJ4Ja_tGDvwzLnxVhYK7v8urkgHGgZQG0UVV_mUKZgq4QcPBf0lDxHdFaejAhKZH92vstM1hzre5z-4U5I1FvfdF5JZfwGjJjfhugtCUG13eAxmer72A3Keqo_HF8UzVr4fsTg1SUWdyk7atht9g
+@token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsNlpXTjQtUGZ1RzhBUzQ2Q25DMkZiRk5tbTlCS0hQVVhDclhHOFZCWjdZIn0.eyJleHAiOjE3Nzk0NDkwMzksImlhdCI6MTc3OTQ0ODczOSwianRpIjoidHJydGNjOmQ0NzViZGI1LTM0ZTUtMGQ5MC1kOTY3LTM3MzFkMDY5MzU0MyIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MC9yZWFsbXMvZml3YXJlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjliM2IzY2JhLTU0MWEtNDQzMC1hNmVhLTliMjliYjg5YTAyOSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImZpd2FyZS1jbGllbnQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtZml3YXJlIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImZpd2FyZS1jbGllbnQiOnsicm9sZXMiOlsidW1hX3Byb3RlY3Rpb24iXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50SG9zdCI6IjE3Mi4xOC4wLjEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtZml3YXJlLWNsaWVudCIsImNsaWVudEFkZHJlc3MiOiIxNzIuMTguMC4xIiwiY2xpZW50X2lkIjoiZml3YXJlLWNsaWVudCJ9.o304Q-HNJ3qp3mC9QTg9Kwkb8pD70mxd1vVXows1OAl_MqKtmA8B5SemNrqndqjAU-CN90GYInvKBTgxbE_mhlKshSDOD3aoNsTHJWLoaBHPwT3xJCVPW-AxXTNmOXl8E5OmHgvm-IiWmpRCN2p6H_toebI_sVqq2W52odBs3MBjY_aPwPqV_lwbQm8RVFRUljUTfANGE8ovUW-x1mFR9Qa5hXjHRgkzbx0YtE9YNXvEdYNhEeQhuI5cTQIKB6ddN0EP3lvHILQ6q8VEaC_cXw-xxvYkW168gOS9dM_-bBHC3qI_5oNC2yZFo3NPR37uxXIqcYfk4I0Gd9o_1Q-TEg
 
 ###
 curl -s -X POST \
@@ -11,8 +11,11 @@ curl -s -X POST \
 
 
 ###
-### http://localhost:8085/realms/fiware/account
-### hay que poner tambien el nombre y el apellido del usuario, sino no se le asignan los roles y no funciona la autenticación
+### ❗️❗️❗️IMPORTANTE ###
+### hay que poner tambien el nombre y el apellido del usuario, 
+### sino no se le asignan los roles y no funciona la autenticación
+### 
+
 curl -s -X POST \
   http://owsei.ddns.net:8080/realms/fiware/protocol/openid-connect/token \
   -H "Content-Type: application/x-www-form-urlencoded" \
@@ -22,40 +25,217 @@ curl -s -X POST \
   -d "password=1111" 
   
 ####
-curl http://owsei.ddns.net/orion/version \
+curl http://localhost:1026/version
+
+###
+curl http://localhost/orion/version \
     -H 'Authorization: Bearer {{token}}' 
  
+ 
+#CYGNUS VERSION
+###
+curl -X GET "http://localhost/cygnus/version" \
+  -H 'Authorization: Bearer {{token}}' 
 
 
 ###
-curl http://owsei.ddns.net/orion/v2/entities  \
-    -H 'Authorization: Bearer {{token}}' 
-###
+curl -X GET http://localhost:81/orion/v2/entities \
+    -H 'Authorization: Bearer {{token}}'
 
 
 
 ###
 ###
 #VERSION IOT AGENT 
-curl -X GET "http://owsei.ddns.net/iot-json-admin/iot/about" \
-    -H 'Authorization: Bearer {{token}}' 
+curl -X GET "http://localhost:4041/iot/about" 
 
 ###
 
-###
-
-curl -X GET "http://owsei.ddns.net/iot-json-admin/iot/devices" \
-  -H 'Authorization: Bearer {{token}}' 
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /'
-
-
-###
-
-#CYGNUS VERSION
-curl -X GET "http://owsei.ddns.net/cygnus/v1/version" \
+curl -X GET "http://localhost/iot-json/devices" \
   -H 'Authorization: Bearer {{token}}' 
 
+#VERSION IOT AGENT 
 ###
-curl "http://localhost:9080/fastapi/" \
-  -H 'Authorization: Bearer {{token}}' 
+curl -X GET "http://localhost/iot-json-admin/iot/about" 
+ -H 'Authorization: Bearer {{token}}' 
+
+###
+
+###
+curl http://localhost/orion/v2/entities
+
+####
+
+curl -X GET http://localhost/orion/version \
+-H 'Authorization: Bearer ${token}'
+
+###
+curl -X GET http://localhost/get \
+  -H 'Authorization: Bearer ${token}'
+
+###
+
+curl http://127.0.0.1:9180/apisix/admin/routes/5 \
+  -H "X-API-KEY: nEIJ33AI1szXO7MIzLGTjQ5CIa4ZlYp3" -X PUT -d '
+{
+    "uri": "/get",
+    "plugins": {
+        "authz-keycloak": {
+            "token_endpoint": "http://keycloak:8080/realms/fiware/protocol/openid-connect/token",
+            "client_id": "fiware-client"
+        }
+    },
+    "upstream": {
+        "type": "roundrobin",
+        "nodes": {
+            "127.0.0.1:8080": 1
+        }
+    }
+}'
+###
+
+curl -XPUT http://localhost:9180/apisix/admin/routes/6 \
+  -H "X-API-KEY: nEIJ33AI1szXO7MIzLGTjQ5CIa4ZlYp3" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "uri": "/orion/*",
+    "plugins": {
+      "openid-connect": {
+        "client_id": "fiware-client",
+        "client_secret": "Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R",
+        "discovery": "http://keycloak:8080/realms/fiware/.well-known/openid-configuration",
+        "bearer_only": true,
+        "realm": "fiware",
+        "token_signing_alg_values_expected": "RS256",
+        "set_access_token_header": true,
+        "access_token_in_authorization_header": true
+      }
+    },
+    "upstream": {
+      "type": "roundrobin",
+      "nodes": {
+        "orion:1026": 1
+      }
+    }
+  }'
+
+
+@toke_new = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsNlpXTjQtUGZ1RzhBUzQ2Q25DMkZiRk5tbTlCS0hQVVhDclhHOFZCWjdZIn0.eyJleHAiOjE3Nzk0NTM4NjEsImlhdCI6MTc3OTQ1MzU2MSwianRpIjoidHJydGNjOjQ4NDNkNmU4LWYyNDctMmVhMC00YjdlLTBlYTZjOTYyOWY2ZCIsImlzcyI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL3JlYWxtcy9maXdhcmUiLCJhdWQiOlsicmVhbG0tbWFuYWdlbWVudCIsImFjY291bnQiXSwic3ViIjoiOWIzYjNjYmEtNTQxYS00NDMwLWE2ZWEtOWIyOWJiODlhMDI5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZml3YXJlLWNsaWVudCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1maXdhcmUiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsicmVhbG0tbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJ2aWV3LXJlYWxtIiwibWFuYWdlLXJlYWxtIl19LCJmaXdhcmUtY2xpZW50Ijp7InJvbGVzIjpbInVtYV9wcm90ZWN0aW9uIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudEhvc3QiOiIxNzIuMTguMC4xIiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2VydmljZS1hY2NvdW50LWZpd2FyZS1jbGllbnQiLCJjbGllbnRBZGRyZXNzIjoiMTcyLjE4LjAuMSIsImNsaWVudF9pZCI6ImZpd2FyZS1jbGllbnQifQ.dptem5GZcOL-CXXdxAtmyJutg7rBsH79RQVP1P6FbbrW0avOz0hxdRLd9lv4rRNe9xd--PjRuydaE00rLGDp-ejGzUDyeAjtd4_3tMIgplG-GO4mcI_XVs3QDihvR-fD83pAVTdRXDYxralHlRIp73s2G1lHAbj3O-TKPiM6aZ1pdPIr4X_RkUscUnu0xIwg0l1D7INgtydYEwKkTWOoQGPT8E49VBjhcjpGdc7TCS2IdIHuLVr4ng22NV_xFBIdMZfnE2p9G0J7TEL4d9GbS2qWB0DXqn3jkiccKY1w7mdZMfU9U26_c80Rk5XqsncI8x-JpboyhAESl8uhnBJOeQ
+
+###
+curl -s -X POST http://localhost:8080/realms/fiware/protocol/openid-connect/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=fiware-client" \
+  -d "client_secret=Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R"
+
+###
+curl -s -X POST \
+  http://localhost:8080/realms/fiware/protocol/openid-connect/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=password" \
+  -d "client_id=fiware-client-users" \
+  -d "username=pedro" \
+  -d "password=1111" 
+  
+
+### introspect token
+curl -s -X POST http://localhost:8080/realms/fiware/protocol/openid-connect/token/introspect \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "token={{toke_new}}" \
+  -d "client_id=fiware-client" \
+  -d "client_secret=Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R"
+
+
+
+###
+curl http://localhost/orion/version\
+  -H "Authorization: Bearer {{toke_new}}"
+
+###
+curl http://localhost:9180/apisix/admin/routes/6 \
+  -H "X-API-KEY: nEIJ33AI1szXO7MIzLGTjQ5CIa4ZlYp3" | jq .value.plugins
+
+###
+
+curl http://localhost/orion/version \
+  -H "Authorization: Bearer {{toke_new}}"
+
+
+###
+
+curl -XPUT http://localhost:9180/apisix/admin/routes/6 \
+  -H "X-API-KEY: nEIJ33AI1szXO7MIzLGTjQ5CIa4ZlYp3" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "uri": "/orion/*",
+    "plugins": {
+      "authz-keycloak": {
+        "token_endpoint": "http://keycloak:8080/realms/fiware/protocol/openid-connect/token",
+        "client_id": "fiware-client",
+        "client_secret": "Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R",
+        "ssl_verify": false,
+        "grant_type": "urn:ietf:params:oauth:grant-type:uma-ticket",
+        "keepalive": true
+      }
+    },
+    "upstream": {
+      "type": "roundrobin",
+      "nodes": {
+        "orion:1026": 1
+      }
+    }
+  }'
+
+
+####
+
+curl -X PUT http://127.0.0.1:9180/apisix/admin/routes/7 \
+  -H "X-API-KEY: nEIJ33AI1szXO7MIzLGTjQ5CIa4ZlYp3" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "uri": "/orion/*",
+    "plugins": {
+      "openid-connect": {
+        "client_id": "fiware-client",
+        "client_secret": "Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R",
+        "discovery": "http://keycloak:8080/realms/fiware/.well-known/openid-configuration",
+        "introspection_endpoint": "http://keycloak:8080/realms/fiware/protocol/openid-connect/token/introspect",
+        "introspection_endpoint_auth_method": "client_secret_post",
+        "bearer_only": true,
+        "realm": "fiware",
+        "ssl_verify": false,
+        "token_signing_alg_values_expected": "RS256"
+      }
+    },
+    "upstream": {
+      "type": "roundrobin",
+      "nodes": {
+        "orion:1026": 1
+      }
+    }
+  }'
+
+
+####
+
+curl -s -X POST http://localhost:8080/realms/fiware/protocol/openid-connect/token/introspect \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "token={{toke_new}}" \
+  -d "client_id=fiware-client" \
+  -d "client_secret=Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R" | jq .
+
+###
+
+# Genera y prueba en el mismo comando
+curl http://localhost/orion/version \
+  -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJsNlpXTjQtUGZ1RzhBUzQ2Q25DMkZiRk5tbTlCS0hQVVhDclhHOFZCWjdZIn0.eyJleHAiOjE3Nzk0NTM4NjEsImlhdCI6MTc3OTQ1MzU2MSwianRpIjoidHJydGNjOjQ4NDNkNmU4LWYyNDctMmVhMC00YjdlLTBlYTZjOTYyOWY2ZCIsImlzcyI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL3JlYWxtcy9maXdhcmUiLCJhdWQiOlsicmVhbG0tbWFuYWdlbWVudCIsImFjY291bnQiXSwic3ViIjoiOWIzYjNjYmEtNTQxYS00NDMwLWE2ZWEtOWIyOWJiODlhMDI5IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZml3YXJlLWNsaWVudCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1maXdhcmUiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsicmVhbG0tbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJ2aWV3LXJlYWxtIiwibWFuYWdlLXJlYWxtIl19LCJmaXdhcmUtY2xpZW50Ijp7InJvbGVzIjpbInVtYV9wcm90ZWN0aW9uIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudEhvc3QiOiIxNzIuMTguMC4xIiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2VydmljZS1hY2NvdW50LWZpd2FyZS1jbGllbnQiLCJjbGllbnRBZGRyZXNzIjoiMTcyLjE4LjAuMSIsImNsaWVudF9pZCI6ImZpd2FyZS1jbGllbnQifQ.dptem5GZcOL-CXXdxAtmyJutg7rBsH79RQVP1P6FbbrW0avOz0hxdRLd9lv4rRNe9xd--PjRuydaE00rLGDp-ejGzUDyeAjtd4_3tMIgplG-GO4mcI_XVs3QDihvR-fD83pAVTdRXDYxralHlRIp73s2G1lHAbj3O-TKPiM6aZ1pdPIr4X_RkUscUnu0xIwg0l1D7INgtydYEwKkTWOoQGPT8E49VBjhcjpGdc7TCS2IdIHuLVr4ng22NV_xFBIdMZfnE2p9G0J7TEL4d9GbS2qWB0DXqn3jkiccKY1w7mdZMfU9U26_c80Rk5XqsncI8x-JpboyhAESl8uhnBJOeQ"
+
+
+###
+curl -s -X POST http://localhost:8080/realms/fiware/protocol/openid-connect/token \
+    -H 'Content-Type: application/x-www-form-urlencoded' \
+    -d 'grant_type=client_credentials' \
+    -d 'client_id=fiware-client' \
+    -d 'client_secret=Zb6ZN3u10BBOETGm7qKSH8DjG7zJ7c5R' \
+    | jq -r '.access_token'

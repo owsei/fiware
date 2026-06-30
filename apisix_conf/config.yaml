@@ -23,6 +23,11 @@ apisix:
   control:
     ip: "0.0.0.0"
     port: 9092
+  
+  proxy_mode: http&stream
+  stream_proxy:
+    tcp:
+      - 9100     # your L4 listening port
 
 deployment:
   admin:
