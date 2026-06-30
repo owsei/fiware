@@ -31,11 +31,11 @@ deployment:
 
     admin_key:
       - name: "admin"
-        key: edd1c9f034335f136f87ad84b625c8f1
+        key: 5b4ac7a8215a39309a12d02f5d8bc86b3e061d0e6a4cf88049d2e7295993e244
         role: admin                 # admin: manage all configuration data
 
       - name: "viewer"
-        key: 4054f7cf07e344346cd3f287985e76a2
+        key: d6ed4e2327e905665c4e1bdbb7db05e22bb32ce487d3d4ace263251b3c8a4d7a
         role: viewer
 
   etcd:

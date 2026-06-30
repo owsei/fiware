@@ -28,19 +28,19 @@ services:
     image: mongo:latest
     container_name: mongo
     hostname: mongo
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     volumes:
-      - mongo_data:/data/db
-    labels:
-      - "traefik.enable=true"
-      # Ruta: http://localhost/mongo/
-      - "traefik.http.routers.mongo.rule=PathPrefix(`/mongo`)"
-      - "traefik.http.routers.mongo.entrypoints=web"
-      - "traefik.http.routers.mongo.middlewares=keycloak-auth,mongo-strip"
-      - "traefik.http.services.mongo.loadbalancer.server.port=27017"
-      # Elimina el prefijo /mongo antes de enviar al servicio
-      - "traefik.http.middlewares.mongo-strip.stripprefix.prefixes=/mongo"
+      - ./mongo:/data/db
+    # labels:
+    #   - "traefik.enable=true"
+    #   # Ruta: http://localhost/mongo/
+    #   - "traefik.http.routers.mongo.rule=PathPrefix(`/mongo`)"
+    #   - "traefik.http.routers.mongo.entrypoints=web"
+    #   - "traefik.http.routers.mongo.middlewares=keycloak-auth,mongo-strip"
+    #   - "traefik.http.services.mongo.loadbalancer.server.port=27017"
+    #   # Elimina el prefijo /mongo antes de enviar al servicio
+    #   - "traefik.http.middlewares.mongo-strip.stripprefix.prefixes=/mongo"
 
     networks:
       - fiware-net
@@ -140,8 +140,8 @@ services:
     build:
       context: .
       dockerfile: dockerfile_fastapi
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     labels:
       - "traefik.enable=true"
       # Ruta: http://localhost/api/
@@ -154,24 +154,24 @@ services:
       - fiware-net
 
   # ── Nginx Web (tu app web) ─────────────────────
-  # nginx_server:
-  #   hostname: nginx
-  #   container_name: nginx
-  #   build:
-  #     context: .
-  #     dockerfile: dockerfile_nginx
-  #   # ports:
-  #   #   - "89:80"
-  #   labels:
-  #     - "traefik.enable=true"
-  #     # Ruta: http://localhost/web/
-  #     - "traefik.http.routers.nginx-web.rule=PathPrefix(`/web`)"
-  #     - "traefik.http.routers.nginx-web.entrypoints=web"
-  #     - "traefik.http.routers.nginx-web.middlewares=keycloak-auth,nginx-strip"
-  #     - "traefik.http.services.nginx-web.loadbalancer.server.port=80"
-  #     - "traefik.http.middlewares.nginx-strip.stripprefix.prefixes=/web"
-  #   networks:
-  #     - fiware-net
+  nginx_server:
+    hostname: nginx
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: dockerfile_nginx
+    ports:
+      - "89:80"
+    labels:
+      - "traefik.enable=true"
+      # Ruta: http://localhost/web/
+      - "traefik.http.routers.nginx-web.rule=PathPrefix(`/web`)"
+      - "traefik.http.routers.nginx-web.entrypoints=web"
+      - "traefik.http.routers.nginx-web.middlewares=nginx-strip"
+      - "traefik.http.services.nginx-web.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.nginx-strip.stripprefix.prefixes=/web"
+    networks:
+      - fiware-net
 
   # ── TimescaleDB ───────────────────────────────
   timescale:
@@ -214,8 +214,8 @@ services:
       KC_DB_SCHEMA: keycloak
       KC_DB_USERNAME: admin
       KC_DB_PASSWORD: admin
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     depends_on:
       - timescale
     command: start-dev
@@ -295,7 +295,10 @@ services:
   #────── Apisix Proxy ───────────────────────────────
   apisix:
     image: apache/apisix:3.16.0-ubuntu
+    hostname: apisix
+    container_name: apisix
     restart: always
+    
     volumes:
       - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
     depends_on:
@@ -311,6 +314,8 @@ services:
   
   etcd:
     image: bitnamilegacy/etcd:3.5.11
+    container_name: etcd
+    hostname: etcd
     restart: always
     volumes:
       - ./etcd_data:/bitnami/etcd

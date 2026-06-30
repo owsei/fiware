@@ -7,3 +7,4 @@ requests
 pymongo
 cors
 gtfs-realtime-bindings
+psutil

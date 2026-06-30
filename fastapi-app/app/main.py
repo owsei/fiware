@@ -11,6 +11,8 @@ import  dbConfig
 import serviceMongoOrion
 import urbanMovility
 import serviceOrionSettings
+import os
+import psutil
 
 MONGO_URI = "mongodb://localhost:27017"
 MONGO_DB = "mi_base"
@@ -133,6 +135,40 @@ def setOrionWebSettings(data: str):
         raise HTTPException(status_code=404, detail="No se encontraron configuraciones web de Orion")
 
 
+# Endpoint para obtener el uso de CPU
+def obtener_info_procesador():
+    # 1. Contar núcleos totales (físicos + virtuales/hilos)
+    # Si tu CPU tiene 4 núcleos y 8 hilos, esto devolverá 8.
+    nucleos_totales = os.cpu_count() or 1
+    nucleos_fisicos = psutil.cpu_count(logical=False)
+    
+    # 2. Obtener el porcentaje de uso actual de la CPU (promedio de todos los núcleos)
+    # 'interval=None' lo hace instantáneo basándose en la última llamada
+    uso_cpu_porcentaje = psutil.cpu_percent(interval=0.1)
+    
+    
+    # 3. Contar cuántas instancias de SUMO se están ejecutando actualmente en el sistema
+    sumo_activos = 0
+    for proc in psutil.process_iter(['name']):
+        try:
+            # Buscamos procesos que se llamen 'sumo' o 'sumo-gui'
+            if proc.info['name'] and 'sumo' in proc.info['name'].lower():
+                sumo_activos += 1
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+
+    return {
+        "nucleos_totales": nucleos_totales,
+        "nucleos_fisicos": nucleos_fisicos,
+        "uso_cpu_actual_porcentaje": uso_cpu_porcentaje,
+        "simulaciones_sumo_corriendo": sumo_activos,
+        "nucleos_disponibles_estimados": max(0, nucleos_totales - sumo_activos)
+    }
+
+@app.get("/server-status/")
+async def server_status():
+    """Endpoint para monitorizar el servidor desde fuera"""
+    return obtener_info_procesador()
 
 
 if __name__ == "__main__":
